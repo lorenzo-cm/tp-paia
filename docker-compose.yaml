@@ -1,0 +1,58 @@
+services:
+  postgres:
+    image: postgres:18.3
+    container_name: postgres-local-template
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: template@postgres123
+    volumes:
+      - postgres_data_template:/var/lib/postgresql
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:8.6.2-alpine
+    container_name: redis-local-template
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data_template:/data
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+
+  qdrant:
+    image: qdrant/qdrant:v1.13.4
+    container_name: qdrant-local-template
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - qdrant_data_template:/qdrant/storage
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: template-worker
+    env_file:
+      - .env
+    command: celery -A app.services.real_estate_rag.tasks.celery_app worker --loglevel=info
+    environment:
+      DATABASE_URL: postgresql+psycopg://postgres:postgres@postgres:5432/template%40postgres123
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/1
+      QDRANT_URL: http://qdrant:6333
+      REDIS_HOST: redis
+    depends_on:
+      - postgres
+      - redis
+      - qdrant
+
+volumes:
+  postgres_data_template:
+    driver: local
+
+  redis_data_template:
+
+  qdrant_data_template:

@@ -1,0 +1,24 @@
+# Ignore generated files
+.vscode
+.mypy_cache
+__pycache__
+.DS_Store
+.cache
+app.egg-info
+*.pyc
+
+# Logs
+logs/
+*.log
+
+# .env
+.env
+.env.prod
+
+
+# test files
+htmlcov
+.coverage
+
+# python envs
+.venv

@@ -1,0 +1,9 @@
+{
+  "total_conversations": 0,
+  "retained_count": 0,
+  "handoff_count": 0,
+  "dropped_count": 0,
+  "scheduled_count": 0,
+  "tool_usage": {},
+  "avg_response_count_per_conversation": 0
+}
