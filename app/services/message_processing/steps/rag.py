@@ -1,7 +1,7 @@
+from app.core.config import get_settings
 from app.services.message_processing.deps import Repos
 from app.services.message_processing.schemas import Enriched
 from app.services.real_estate_rag.factory import get_building_rag_service
-from app.core.config import get_settings
 
 
 def rag_index(enriched: Enriched, repos: Repos) -> Enriched:

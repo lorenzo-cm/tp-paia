@@ -20,11 +20,14 @@ from app.services.agent.base import (
     BaseAgent,
     ToolResult,
 )
+from app.services.agent.guardrails import build_model_user_text, inspect_user_text
+from app.services.agent.response_guardrails import SAFE_FALLBACK, sanitize_customer_text
+from app.services.agent.tool_guardrails import validate_tool_call
 from app.services.message_processing.deps import Repos
 from app.services.message_processing.mappers import to_agent_messages
 from app.services.message_processing.protocols import OutboundSender
 from app.services.message_processing.schemas import ConversationContext, Enriched
-from app.services.real_estate_tools import REAL_ESTATE_TOOL_REGISTRY
+from app.services.real_estate_tools import REAL_ESTATE_TOOL_REGISTRY, REAL_ESTATE_TOOLS
 
 logger = logging.getLogger(__name__)
 
@@ -73,9 +76,35 @@ async def invoke_agent(
     )
     history = to_agent_messages([m for m in recent if m.id not in batch_ids])
     rag_context = _format_rag_context(enriched.rag_context)
-    user_text = enriched.combined_text
-    if rag_context:
-        user_text = f"{rag_context}\n\nPedido do usuario:\n{user_text}".strip()
+    inspection = inspect_user_text(enriched.combined_text)
+    if inspection.suspicion:
+        _record_guardrail_event(
+            context=context,
+            repos=repos,
+            event="prompt_injection_suspected",
+            payload={
+                "suspicion": inspection.suspicion,
+                "reasons": inspection.reasons,
+                "action": inspection.action,
+            },
+        )
+    if inspection.is_strong:
+        refusal = (
+            "Posso ajudar apenas com informacoes de imoveis e atendimento comercial. "
+            "Se voce quiser, encaminho para um atendente humano."
+        )
+        repos.message.create(
+            MessageCreate(
+                conversation_id=context.conversation_id,
+                sender_participant_id=context.bot_participant_id,
+                sender_type=SenderType.ASSISTANT,
+                content=refusal,
+            )
+        )
+        db.commit()
+        await asyncio.to_thread(sender.send_message, context.conv_ext_id, refusal)
+        return
+    user_text = build_model_user_text(rag_context=rag_context, user_text=enriched.combined_text)
     user_msg = AgentMessage(
         role="user",
         text=user_text,
@@ -95,6 +124,22 @@ async def invoke_agent(
             parsed=parsed,
             context=context,
             repos=repos,
+        )
+        parsed.customer_text = SAFE_FALLBACK
+        _record_guardrail_event(
+            context=context,
+            repos=repos,
+            event="agent_output_sanitized",
+            payload={"reason": "invalid_structured_output"},
+        )
+    sanitized_text, sanitized = sanitize_customer_text(parsed.customer_text)
+    parsed.customer_text = sanitized_text
+    if sanitized:
+        _record_guardrail_event(
+            context=context,
+            repos=repos,
+            event="agent_output_sanitized",
+            payload={"raw_preview": response.text[:200]},
         )
     repos.message.create(
         MessageCreate(
@@ -157,37 +202,66 @@ async def _execute_tool(
     db.flush()
 
     tool = REAL_ESTATE_TOOL_REGISTRY.get(tool_name)
-    if tool is None:
-        result: dict[str, Any] = {
-            "success": False,
-            "tool_output": {
-                "error": f"Tool desconhecida: {tool_name}",
-                "error_code": "unknown_tool",
-                "tool": tool_name,
-            },
-        }
-    elif "_invalid_json" in arguments:
+    if "_invalid_json" in arguments:
         result = {
             "success": False,
             "tool_output": {
-                "error": "Argumentos da tool nao sao JSON valido.",
+                "error": "Nao foi possivel interpretar os parametros da acao.",
                 "error_code": "invalid_arguments",
-                "raw_arguments": arguments["_invalid_json"],
                 "tool": tool_name,
             },
         }
     else:
-        try:
-            result = dict(await asyncio.to_thread(tool, **arguments))
-        except Exception as exc:  # pragma: no cover - defensive boundary
+        validation = validate_tool_call(
+            tool_name=tool_name,
+            arguments=arguments,
+            tool_registry=REAL_ESTATE_TOOL_REGISTRY,
+            tool_definitions=REAL_ESTATE_TOOLS,
+        )
+        if not validation.ok:
+            _record_guardrail_event(
+                context=context,
+                repos=repos,
+                event="tool_call_rejected",
+                payload={
+                    "tool_name": tool_name,
+                    "error_code": validation.error_code,
+                },
+            )
             result = {
                 "success": False,
                 "tool_output": {
-                    "error": str(exc),
-                    "error_code": "tool_execution_failed",
+                    "error": "Nao foi possivel executar essa acao automaticamente.",
+                    "error_code": validation.error_code,
                     "tool": tool_name,
                 },
             }
+        elif tool is None:
+            result = {
+                "success": False,
+                "tool_output": {
+                    "error": "Nao foi possivel executar essa acao automaticamente.",
+                    "error_code": "unknown_tool",
+                    "tool": tool_name,
+                },
+            }
+        else:
+            try:
+                result = dict(await asyncio.to_thread(tool, **arguments))
+            except Exception:  # pragma: no cover - defensive boundary
+                logger.warning(
+                    "tool execution failed",
+                    extra={"tool_name": tool_name},
+                    exc_info=True,
+                )
+                result = {
+                    "success": False,
+                    "tool_output": {
+                        "error": "Nao foi possivel concluir essa acao automaticamente.",
+                        "error_code": "tool_execution_failed",
+                        "tool": tool_name,
+                    },
+                }
 
     media_urls = _extract_media_urls(result)
     media_events = await _send_tool_media(sender, context.conv_ext_id, media_urls)
@@ -420,6 +494,32 @@ def _record_structured_output_failure(
                 **current_meta,
                 "last_system_error": "agent_structured_output_invalid",
             },
+        )
+    )
+
+
+def _record_guardrail_event(
+    *,
+    context: ConversationContext,
+    repos: Repos,
+    event: str,
+    payload: dict[str, Any],
+) -> None:
+    logger.warning(
+        "guardrail event",
+        extra={
+            "conversation_id": str(context.conversation_id),
+            "event": event,
+            **payload,
+        },
+    )
+    repos.message.create(
+        MessageCreate(
+            conversation_id=context.conversation_id,
+            sender_participant_id=context.bot_participant_id,
+            sender_type=SenderType.SYSTEM,
+            content=json.dumps(payload, ensure_ascii=False, default=str),
+            meta={"event": event, **payload},
         )
     )
 

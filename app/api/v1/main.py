@@ -3,6 +3,7 @@ from typing import Any
 
 from fastapi import APIRouter, Depends
 
+from app.api.v1.admin_buildings import router as admin_buildings_router
 from app.api.v1.webhooks.chatwoot import router as chatwoot_router
 from app.core.auth import get_current_user
 from app.core.auth.fake_users import FakeUser
@@ -13,6 +14,7 @@ router = APIRouter()
 logger = logging.getLogger(__name__)
 
 router.include_router(chatwoot_router, tags=["chatwoot"])
+router.include_router(admin_buildings_router)
 
 
 @router.get("/health")

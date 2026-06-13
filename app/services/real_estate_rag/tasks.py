@@ -36,6 +36,9 @@ def _as_rag_payload(payload: dict[str, Any]) -> BuildingRagPayload:
         source_url=payload.get("source_url"),
         information=str(payload.get("information", "")),
         extraction_version=payload.get("extraction_version"),
+        photos_url=list(payload.get("photos_url", []) or []),
+        videos_url=list(payload.get("videos_url", []) or []),
+        documents_url=list(payload.get("documents_url", []) or []),
     )
 
 
@@ -73,5 +76,9 @@ def schedule_building_reindex(building_payload: dict[str, Any]) -> Any:
     task = reindex_building_catalog
     delay = getattr(task, "delay", None)
     if callable(delay):
-        return delay(building_payload)
+        try:
+            delay(building_payload)
+        except Exception:
+            return task(building_payload)
+        return task(building_payload)
     return task(building_payload)

@@ -3,11 +3,11 @@ from uuid import UUID
 
 from app.db.models.conversations import Message
 from app.services.agent.base import AgentAttachment
-from app.services.real_estate_rag.schemas import RagHit
 from app.services.message_processing.schemas.inbound import (
     InboundAttachment,
     InboundMessage,
 )
+from app.services.real_estate_rag.schemas import RagHit
 
 
 @dataclass

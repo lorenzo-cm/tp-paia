@@ -1,6 +1,6 @@
+import logging
 import re
 import unicodedata
-import logging
 import uuid
 from typing import Any
 
@@ -94,7 +94,13 @@ class BuildingRepository(
             "source_url": building.source_url,
             "information": building.information or "",
             "extraction_version": building.extraction_version,
+            "photos_url": building.photos_url or [],
+            "videos_url": building.videos_url or [],
+            "documents_url": building.documents_url or [],
         }
+
+    def serialize_rag_payload(self, building: Building) -> dict[str, Any]:
+        return self._rag_payload(building)
 
     def _queue_rag_reindex(self, building: Building) -> None:
         try:

@@ -2,6 +2,7 @@ from itertools import count
 from uuid import uuid4
 
 import pytest
+from sqlalchemy import text
 from sqlmodel import Session
 
 import app.services.real_estate_tools.tools as tools_module
@@ -30,6 +31,13 @@ def _reset_rag_index() -> None:
     reset_in_memory_collections()
     yield
     reset_in_memory_collections()
+
+
+@pytest.fixture(autouse=True)
+def _truncate_buildings(db_engine) -> None:
+    with Session(db_engine) as db:
+        db.exec(text("TRUNCATE buildings RESTART IDENTITY CASCADE"))  # type: ignore[call-overload]
+        db.commit()
 
 
 def _seed_building(db_engine, **overrides):

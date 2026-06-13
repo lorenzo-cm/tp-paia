@@ -182,7 +182,7 @@ def test_reindex_refreshes_bm25_when_new_building_enters_catalog() -> None:
     after_hits = service.search("sauna tripla", limit=3)
 
     assert after_hits[0].building_id == second_id
-    assert after_hits[0].text == "Planta com sauna tripla e hall exclusivo."
+    assert "sauna tripla" in after_hits[0].text.lower()
 
 
 def test_search_uses_extracted_information_text() -> None:

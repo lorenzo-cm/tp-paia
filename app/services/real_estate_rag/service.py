@@ -29,6 +29,9 @@ class BuildingRagPayload:
     source_url: str | None
     information: str
     extraction_version: str | None = None
+    photos_url: list[str] | None = None
+    videos_url: list[str] | None = None
+    documents_url: list[str] | None = None
 
 
 def _normalize_ws(text: str) -> str:
@@ -114,10 +117,13 @@ class BuildingRAGService:
             "chunk_index": chunk_index,
             "text": chunk_text,
             "extraction_version": payload.extraction_version,
+            "photos_url": payload.photos_url or [],
+            "videos_url": payload.videos_url or [],
+            "documents_url": payload.documents_url or [],
         }
 
     def index_building_payload(self, payload: BuildingRagPayload) -> int:
-        chunks = self.chunk_information(payload.information)
+        chunks = self.chunk_information(_compose_information(payload))
         self._store.ensure_collection()
         self._store.delete_building(payload.building_id)
         if not chunks:
@@ -150,6 +156,9 @@ class BuildingRAGService:
                 source_url=building.source_url,
                 information=building.information or "",
                 extraction_version=building.extraction_version,
+                photos_url=building.photos_url or [],
+                videos_url=building.videos_url or [],
+                documents_url=building.documents_url or [],
             )
         )
 
@@ -245,6 +254,21 @@ class BuildingRAGService:
             building_id=building_id,
             limit=limit,
         )
+
+
+def _compose_information(payload: BuildingRagPayload) -> str:
+    lines = [payload.building_name.strip(), payload.information.strip()]
+    if payload.photos_url:
+        lines.append(f"Fotos disponiveis: {len(payload.photos_url)}")
+    if payload.videos_url:
+        lines.append(f"Videos disponiveis: {len(payload.videos_url)}")
+    if payload.documents_url:
+        lines.append(f"Documentos disponiveis: {len(payload.documents_url)}")
+    if payload.source_url:
+        lines.append(f"Fonte: {payload.source_url}")
+    if payload.extraction_version:
+        lines.append(f"Versao de extracao: {payload.extraction_version}")
+    return "\n".join(line for line in lines if line)
 
 
 def create_building_rag_service() -> BuildingRAGService:
