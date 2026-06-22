@@ -40,6 +40,10 @@ DEFAULT_CONVERSATION_META: dict[str, Any] = {
 VALID_LEAD_QUALITIES = {quality.value for quality in LeadQuality}
 
 
+def _supports_open_conversation(sender: OutboundSender) -> bool:
+    return callable(getattr(sender, "open_conversation", None))
+
+
 @dataclass
 class ParsedAgentReply:
     customer_text: str
@@ -278,6 +282,15 @@ async def _execute_tool(
                 lead_quality=lead_quality,
                 qualification_reason=qualification_reason,
             )
+        if _supports_open_conversation(sender):
+            try:
+                await asyncio.to_thread(sender.open_conversation, context.conv_ext_id)
+            except Exception:
+                logger.warning(
+                    "failed to reopen conversation on human handoff",
+                    extra={"conversation_id": context.conv_ext_id, "tool_name": tool_name},
+                    exc_info=True,
+                )
 
     _update_conversation_meta(tool_name, arguments, result, context, repos)
     duration_ms = int((time.monotonic() - started) * 1000)

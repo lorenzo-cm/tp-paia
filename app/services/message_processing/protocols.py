@@ -14,6 +14,8 @@ class OutboundSender(Protocol):
         attachments: list[str] | None = None,
     ) -> None: ...
 
+    def open_conversation(self, conversation_id: int) -> None: ...
+
 
 @runtime_checkable
 class MediaFetcher(Protocol):

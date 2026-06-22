@@ -50,3 +50,15 @@ class TestSendMessage:
             kwargs = http_ctx.post.call_args.kwargs
             assert "conversations/42/messages" in http_ctx.post.call_args.args[0]
             assert kwargs["data"] == {"content": "Hi there", "message_type": "outgoing"}
+
+    def test_open_conversation_toggles_status_to_open(self, client: ChatwootClient) -> None:
+        with patch("app.services.chatwoot.client.httpx.Client") as http_client:
+            http_ctx = http_client.return_value.__enter__.return_value
+            http_ctx.post.return_value = MagicMock(raise_for_status=lambda: None)
+
+            client.open_conversation(conversation_id=42)
+
+            http_ctx.post.assert_called_once()
+            kwargs = http_ctx.post.call_args.kwargs
+            assert "conversations/42/toggle_status" in http_ctx.post.call_args.args[0]
+            assert kwargs["json"] == {"status": "open"}

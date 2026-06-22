@@ -83,12 +83,16 @@ class FakeDebouncer:
 class FakeSender:
     def __init__(self) -> None:
         self.calls: list[tuple[int, str]] = []
+        self.open_calls: list[int] = []
 
     def send_message(
         self, conversation_id: int, message: str = "", attachments: Any = None
     ) -> bool:
         self.calls.append((conversation_id, message))
         return True
+
+    def open_conversation(self, conversation_id: int) -> None:
+        self.open_calls.append(conversation_id)
 
 
 class FakeMediaFetcher:
@@ -640,6 +644,7 @@ async def test_tool_handoff_updates_metrics_and_counts_tool_usage(
     assert sender.calls == [
         (9012, "Vou encaminhar seu atendimento."),
     ]
+    assert sender.open_calls == [9012]
 
 
 async def test_derived_attachment_text_is_written_to_message_content(

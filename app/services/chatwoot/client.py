@@ -38,6 +38,16 @@ class ChatwootClient:
                 )
                 response.raise_for_status()
 
+    def open_conversation(self, conversation_id: int) -> None:
+        with httpx.Client() as client:
+            response = client.post(
+                self._build_toggle_status_url(conversation_id),
+                headers=self._build_headers(),
+                json={"status": "open"},
+                timeout=30.0,
+            )
+            response.raise_for_status()
+
     def _build_headers(self) -> dict[str, str]:
         return {"api_access_token": self._api_key}
 
@@ -45,6 +55,12 @@ class ChatwootClient:
         return (
             f"{self._api_url}/api/v1/accounts/"
             f"{self._account_id}/conversations/{conversation_id}/messages"
+        )
+
+    def _build_toggle_status_url(self, conversation_id: int) -> str:
+        return (
+            f"{self._api_url}/api/v1/accounts/"
+            f"{self._account_id}/conversations/{conversation_id}/toggle_status"
         )
 
     def _split_sends(
