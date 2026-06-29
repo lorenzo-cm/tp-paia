@@ -23,24 +23,71 @@ from app.core.config import get_settings
 DEFAULT_DATASET = [
     {
         "name": "Residencial Aurora",
-        "information": "Apartamentos de 2 e 3 quartos, lazer completo e localizacao central.",
+        "information": (
+            "Apartamento compacto em regiao central, ideal para primeiro imovel, casal "
+            "ou investidor que busca praticidade no dia a dia. O empreendimento oferece "
+            "unidades de 1 e 2 quartos com plantas entre 48 e 67 metros quadrados, "
+            "ambientes bem resolvidos, cozinha integrada e vaga de garagem coberta em "
+            "algumas unidades. A localizacao facilita acesso a comercio, servicos, "
+            "transporte e vida urbana, enquanto o condominio entrega uma proposta enxuta "
+            "e funcional para quem quer morar perto de tudo. As imagens cadastradas "
+            "mostram ambientes como cozinha, banheiro e garagem, o que ajuda o atendimento "
+            "a detalhar o estilo do imovel de forma objetiva."
+        ),
         "photos_url": [
-            "https://cdn.example.com/aurora/fachada-01.jpg",
-            "https://cdn.example.com/aurora/lazer-piscina.jpg",
+            "https://pub-78d5c1f023a34caab9a8c5564c4931e8.r2.dev/imagem_cozinha.webp",
+            "https://pub-78d5c1f023a34caab9a8c5564c4931e8.r2.dev/imagem_banheiro.jpg",
+            "https://pub-78d5c1f023a34caab9a8c5564c4931e8.r2.dev/imagem_garagem.jpeg",
         ],
-        "videos_url": ["https://cdn.example.com/aurora/tour.mp4"],
-        "documents_url": ["https://cdn.example.com/aurora/memorial.pdf"],
-        "source_url": "https://example.com/aurora",
-        "extraction_version": "seed-v1",
+        "videos_url": [],
+        "documents_url": [],
+        "source_url": "https://example.com/residencial-aurora",
+        "extraction_version": "seed-v2",
     },
     {
-        "name": "Mirante das Palmeiras",
-        "information": "Unidades compactas com varanda, coworking e facil acesso ao metro.",
-        "photos_url": ["https://cdn.example.com/mirante/fachada.jpg"],
-        "videos_url": ["https://cdn.example.com/mirante/apresentacao.mp4"],
-        "documents_url": ["https://cdn.example.com/mirante/book.pdf"],
-        "source_url": "https://example.com/mirante",
-        "extraction_version": "seed-v1",
+        "name": "Casa Mirante das Palmeiras",
+        "information": (
+            "Casa ampla voltada para familias que valorizam espaco, lazer privativo e "
+            "conforto para receber convidados. O imovel conta com 4 suites, sala em "
+            "dois ambientes, cozinha generosa, varanda gourmet, piscina, quintal e "
+            "garagem para varios carros, com area construida aproximada de 320 metros "
+            "quadrados. O perfil e de moradia definitiva para quem busca mais area "
+            "interna e externa, com destaque para convivio social e rotina familiar. "
+            "A foto principal destaca a piscina e o video ajuda o cliente a entender a "
+            "escala da casa e a distribuicao dos ambientes."
+        ),
+        "photos_url": [
+            "https://pub-78d5c1f023a34caab9a8c5564c4931e8.r2.dev/imagem_casa_piscina.jpg"
+        ],
+        "videos_url": [
+            "https://pub-78d5c1f023a34caab9a8c5564c4931e8.r2.dev/video_imovel.mp4"
+        ],
+        "documents_url": [],
+        "source_url": "https://example.com/casa-mirante-das-palmeiras",
+        "extraction_version": "seed-v2",
+    },
+    {
+        "name": "Brisa do Mar Residence",
+        "information": (
+            "Imovel com proposta de segunda moradia ou vida leve perto da praia, pensado "
+            "para quem prioriza descanso, vista aberta e atmosfera de litoral. O projeto "
+            "traz 3 quartos, varanda ampla, integracao entre sala e area externa e "
+            "aproximadamente 110 metros quadrados, com foco em ventilacao, iluminacao "
+            "natural e experiencia de uso nos fins de semana ou temporadas longas. "
+            "O perfil combina bem com clientes que perguntam sobre proximidade da orla, "
+            "lazer, praticidade de manutencao e uso para familia ou temporadas. A imagem "
+            "de jardim reforca o clima do imovel e o documento em PDF concentra as "
+            "especificacoes principais para consulta mais detalhada."
+        ),
+        "photos_url": [
+            "https://pub-78d5c1f023a34caab9a8c5564c4931e8.r2.dev/imagem_jardim.jpg"
+        ],
+        "videos_url": [],
+        "documents_url": [
+            "https://pub-78d5c1f023a34caab9a8c5564c4931e8.r2.dev/EspecificacoesImovel.pdf"
+        ],
+        "source_url": "https://example.com/brisa-do-mar-residence",
+        "extraction_version": "seed-v2",
     },
 ]
 

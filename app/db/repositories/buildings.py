@@ -156,9 +156,8 @@ class BuildingRepository(
                 "source_url": building.source_url,
                 "extraction_version": building.extraction_version,
             },
-            "building_photos": building.photos_url or [],
-            "building_videos": building.videos_url or [],
-            "building_documents": building.documents_url or [],
+            # URLs are intentionally omitted: the model must call send_photo_file,
+            # send_video_file or send_building_document to deliver media to the user.
             "building_photos_total": len(building.photos_url or []),
             "building_videos_total": len(building.videos_url or []),
             "building_documents_total": len(building.documents_url or []),

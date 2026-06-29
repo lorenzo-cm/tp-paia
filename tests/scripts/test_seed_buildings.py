@@ -6,6 +6,26 @@ from sqlmodel import Session
 from scripts import seed_buildings as seed_module
 
 
+def test_default_dataset_has_three_distinct_profiles() -> None:
+    dataset = seed_module.DEFAULT_DATASET
+
+    assert len(dataset) == 3
+    assert dataset[0]["name"] == "Residencial Aurora"
+    assert len(dataset[0]["photos_url"]) == 3
+    assert dataset[0]["videos_url"] == []
+    assert dataset[0]["documents_url"] == []
+
+    assert dataset[1]["name"] == "Casa Mirante das Palmeiras"
+    assert len(dataset[1]["photos_url"]) == 1
+    assert len(dataset[1]["videos_url"]) == 1
+    assert dataset[1]["documents_url"] == []
+
+    assert dataset[2]["name"] == "Brisa do Mar Residence"
+    assert len(dataset[2]["photos_url"]) == 1
+    assert dataset[2]["videos_url"] == []
+    assert len(dataset[2]["documents_url"]) == 1
+
+
 def test_seed_buildings_upsert_and_index_now(db_engine, monkeypatch, capsys) -> None:
     with Session(db_engine) as db:
         db.exec(text("TRUNCATE buildings RESTART IDENTITY CASCADE"))  # type: ignore[call-overload]

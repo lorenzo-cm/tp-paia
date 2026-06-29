@@ -35,14 +35,20 @@ REAL_ESTATE_TOOLS: list[dict[str, Any]] = [
     {
         "type": "function",
         "name": "get_all_building",
-        "description": "List all available buildings/enterprises by name only.",
+        "description": (
+            "List all available buildings by name. Use when the user asks for options, "
+            "catalog, alternatives or says they still do not know which profile of property they want."
+        ),
         "strict": False,
         "parameters": {"type": "object", "properties": {}, "required": []},
     },
     {
         "type": "function",
         "name": "get_building_info",
-        "description": "Retrieve details and media inventory for one building by building_id.",
+        "description": (
+            "Retrieve the confirmed details and media inventory for one building by building_id. "
+            "Use before describing characteristics, photos, videos or documents of a building in focus."
+        ),
         "strict": False,
         "parameters": {
             "type": "object",
@@ -60,7 +66,8 @@ REAL_ESTATE_TOOLS: list[dict[str, Any]] = [
         "type": "function",
         "name": "search_building_information",
         "description": (
-            "Search the indexed catalog text and return relevant building snippets."
+            "Search the indexed catalog text and return relevant building snippets. "
+            "Use to confirm specific facts, compare buildings or answer a question not fully covered by the basic building info."
         ),
         "strict": False,
         "parameters": {
@@ -89,7 +96,8 @@ REAL_ESTATE_TOOLS: list[dict[str, Any]] = [
         "type": "function",
         "name": "send_photo_file",
         "description": (
-            "Send up to two building photos from one returned property part to the user."
+            "Send up to two building photos from one requested property part to the user. "
+            "Interpret the requested part from file names or environments such as cozinha, banheiro, garagem, jardim or piscina."
         ),
         "strict": True,
         "parameters": {
@@ -105,7 +113,10 @@ REAL_ESTATE_TOOLS: list[dict[str, Any]] = [
     {
         "type": "function",
         "name": "send_video_file",
-        "description": "Send one building video to the user.",
+        "description": (
+            "Send one building video to the user. "
+            "Use only after get_building_info confirms an available video for the building in focus."
+        ),
         "strict": True,
         "parameters": {
             "type": "object",
@@ -120,7 +131,10 @@ REAL_ESTATE_TOOLS: list[dict[str, Any]] = [
     {
         "type": "function",
         "name": "send_building_document",
-        "description": "Send one building document to the user.",
+        "description": (
+            "Send one building document to the user. "
+            "Use when the user asks for PDF, specifications or more formal material already confirmed in the building inventory."
+        ),
         "strict": True,
         "parameters": {
             "type": "object",
@@ -135,7 +149,10 @@ REAL_ESTATE_TOOLS: list[dict[str, Any]] = [
     {
         "type": "function",
         "name": "store_lead_house",
-        "description": "Store the last building of interest from the user.",
+        "description": (
+            "Store the current building of interest from the user. "
+            "Use when the user shows clear interest in a specific property and the conversation starts moving toward qualification."
+        ),
         "strict": True,
         "parameters": {
             "type": "object",
@@ -147,7 +164,10 @@ REAL_ESTATE_TOOLS: list[dict[str, Any]] = [
     {
         "type": "function",
         "name": "transfer_human",
-        "description": "Transfer conversation to a human agent after collecting email.",
+        "description": (
+            "Transfer the conversation to a human agent after collecting email. "
+            "Use for visit requests, negotiation, proposal, next commercial step or out-of-scope demands that should not stay with the bot."
+        ),
         "strict": False,
         "parameters": {
             "type": "object",
