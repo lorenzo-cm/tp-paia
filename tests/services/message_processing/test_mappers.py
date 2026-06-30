@@ -1,15 +1,24 @@
 from types import SimpleNamespace
 from typing import Any
 
-from app.db.models.conversations import SenderType
+from app.db.models.conversations import InteractionType, SenderType
 from app.services.message_processing.mappers import to_agent_messages
 
 
-def _msg(sender_type: SenderType, content: str | None, attachments: list[Any] | None = None) -> Any:
+def _msg(
+    sender_type: SenderType,
+    content: str | None,
+    attachments: list[Any] | None = None,
+    *,
+    interaction_type: InteractionType = InteractionType.CHAT,
+    meta: dict[str, Any] | None = None,
+) -> Any:
     return SimpleNamespace(
         sender_type=sender_type,
         content=content,
         attachments=attachments or [],
+        interaction_type=interaction_type,
+        meta=meta,
     )
 
 
@@ -81,3 +90,52 @@ def test_message_with_only_valid_attachment_is_kept() -> None:
     assert len(out) == 1
     assert out[0].text == ""
     assert out[0].attachments[0].file_type == "image"
+
+
+def test_successful_media_send_becomes_assistant_note() -> None:
+    out = to_agent_messages(
+        [
+            _msg(SenderType.USER, "manda o video"),
+            _msg(
+                SenderType.SYSTEM,
+                '{"success": true}',
+                interaction_type=InteractionType.TOOL_RESPONSE,
+                meta={
+                    "event": "tool_success",
+                    "tool_name": "send_video_file",
+                    "media_urls": ["https://cdn.example.com/aurora/tour.mp4"],
+                },
+            ),
+        ]
+    )
+
+    assert [(m.role, m.text) for m in out] == [
+        ("user", "manda o video"),
+        ("assistant", "[midia ja enviada ao cliente: tour.mp4]"),
+    ]
+
+
+def test_failed_or_non_media_tool_responses_are_omitted() -> None:
+    out = to_agent_messages(
+        [
+            _msg(
+                SenderType.SYSTEM,
+                "{}",
+                interaction_type=InteractionType.TOOL_RESPONSE,
+                meta={
+                    "event": "tool_failed",
+                    "tool_name": "send_video_file",
+                    "media_urls": [],
+                },
+            ),
+            _msg(
+                SenderType.SYSTEM,
+                "{}",
+                interaction_type=InteractionType.TOOL_RESPONSE,
+                meta={"event": "tool_success", "tool_name": "get_all_building"},
+            ),
+            _msg(SenderType.USER, "kept"),
+        ]
+    )
+
+    assert [m.text for m in out] == ["kept"]

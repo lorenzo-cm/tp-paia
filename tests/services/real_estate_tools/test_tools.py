@@ -223,6 +223,72 @@ def test_send_video_and_document_return_requested_media(
     assert document["tool_output"]["document_url"] == "https://cdn.example.com/aurora/memorial.pdf"
 
 
+def test_send_video_and_document_match_by_partial_name(
+    db_engine, monkeypatch
+) -> None:
+    """An exact name is preferred, but a partial/approximate name (e.g. without the
+    extension) still resolves to the right file via substring matching."""
+    building = _seed_building(db_engine)
+    monkeypatch.setattr(tools_module, "engine", db_engine)
+
+    video = send_video_file(building_id=str(building.id), video_file_name="tour")
+    document = send_building_document(
+        building_id=str(building.id), document_file_name="memorial"
+    )
+
+    assert video["success"] is True
+    assert video["tool_output"]["video_url"] == "https://cdn.example.com/aurora/tour.mp4"
+    assert document["success"] is True
+    assert (
+        document["tool_output"]["document_url"]
+        == "https://cdn.example.com/aurora/memorial.pdf"
+    )
+
+
+def test_send_video_reports_available_when_name_does_not_match(
+    db_engine, monkeypatch
+) -> None:
+    """A name that matches nothing must NOT send an arbitrary file; it returns the
+    available options so the model can retry with a real name."""
+    building = _seed_building(db_engine)
+    monkeypatch.setattr(tools_module, "engine", db_engine)
+
+    video = send_video_file(
+        building_id=str(building.id), video_file_name="inexistente.mp4"
+    )
+
+    assert video["success"] is False
+    assert video["tool_output"]["error_code"] == "media_not_found"
+    assert video["tool_output"]["available"] == ["tour.mp4", "apresentacao.mp4"]
+    assert "video_url" not in video["tool_output"]
+
+
+def test_send_video_returns_media_not_found_when_building_has_no_video(
+    db_engine, monkeypatch
+) -> None:
+    with Session(db_engine) as db:
+        building = BuildingRepository(db).create(
+            BuildingCreate(
+                name="Sem Video",
+                information="Empreendimento sem video.",
+                photos_url=["https://cdn.example.com/sem-video/fachada.jpg"],
+                videos_url=[],
+                documents_url=[],
+                source_url=f"https://example.com/sem-video/{next(_source_counter)}",
+                extraction_version="v1",
+            )
+        )
+        db.commit()
+        db.refresh(building)
+    monkeypatch.setattr(tools_module, "engine", db_engine)
+
+    video = send_video_file(building_id=str(building.id), video_file_name="tour.mp4")
+
+    assert video["success"] is False
+    assert video["tool_output"]["error_code"] == "media_not_found"
+    assert video["tool_output"]["available"] == []
+
+
 def test_store_lead_house_registers_interest_payload(db_engine, monkeypatch) -> None:
     building = _seed_building(db_engine)
     monkeypatch.setattr(tools_module, "engine", db_engine)

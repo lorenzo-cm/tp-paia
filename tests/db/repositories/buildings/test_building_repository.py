@@ -99,6 +99,11 @@ class TestToolHelpers:
         assert payload["building_photos_total"] == 2
         assert payload["building_videos_total"] == 1
         assert payload["building_documents_total"] == 1
+        assert payload["media_inventory"] == {
+            "photos": ["fachada.jpg", "piscina.jpg"],
+            "videos": ["tour.mp4"],
+            "documents": ["aurora.pdf"],
+        }
 
     def test_get_building_info_for_tool_returns_none_for_unknown_id(
         self, db_session: Session

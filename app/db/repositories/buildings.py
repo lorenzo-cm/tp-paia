@@ -16,6 +16,12 @@ from app.services.real_estate_rag.tasks import schedule_building_reindex
 logger = logging.getLogger(__name__)
 
 
+def media_file_name(url: str) -> str:
+    """Last path segment of a media URL, used as the file name the model
+    references when requesting media via the send_* tools."""
+    return str(url).rstrip("/").split("/")[-1] or str(url)
+
+
 def normalize_catalog_name(name: str) -> str:
     text = unicodedata.normalize("NFKD", str(name or "")).encode("ascii", "ignore").decode(
         "ascii"
@@ -158,9 +164,18 @@ class BuildingRepository(
             },
             # URLs are intentionally omitted: the model must call send_photo_file,
             # send_video_file or send_building_document to deliver media to the user.
+            # File names ARE exposed so the model can request a specific item by
+            # name (the send_* tools match against these names).
             "building_photos_total": len(building.photos_url or []),
             "building_videos_total": len(building.videos_url or []),
             "building_documents_total": len(building.documents_url or []),
+            "media_inventory": {
+                "photos": [media_file_name(u) for u in building.photos_url or []],
+                "videos": [media_file_name(u) for u in building.videos_url or []],
+                "documents": [
+                    media_file_name(u) for u in building.documents_url or []
+                ],
+            },
         }
 
     def get_building_info_for_tool(

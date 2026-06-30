@@ -97,7 +97,9 @@ REAL_ESTATE_TOOLS: list[dict[str, Any]] = [
         "name": "send_photo_file",
         "description": (
             "Send up to two building photos from one requested property part to the user. "
-            "Interpret the requested part from file names or environments such as cozinha, banheiro, garagem, jardim or piscina."
+            "Pass parte_do_imovel as an environment word (cozinha, banheiro, garagem, jardim, piscina) "
+            "matching the photo names in media_inventory.photos returned by get_building_info. "
+            "If nothing matches, the tool returns the available names; retry with one of them."
         ),
         "strict": True,
         "parameters": {
@@ -114,8 +116,9 @@ REAL_ESTATE_TOOLS: list[dict[str, Any]] = [
         "type": "function",
         "name": "send_video_file",
         "description": (
-            "Send one building video to the user. "
-            "Use only after get_building_info confirms an available video for the building in focus."
+            "Send one building video to the user. Pass video_file_name using an exact "
+            "name from media_inventory.videos returned by get_building_info. If the name "
+            "does not match, the tool returns the available names; retry with one of them."
         ),
         "strict": True,
         "parameters": {
@@ -132,8 +135,9 @@ REAL_ESTATE_TOOLS: list[dict[str, Any]] = [
         "type": "function",
         "name": "send_building_document",
         "description": (
-            "Send one building document to the user. "
-            "Use when the user asks for PDF, specifications or more formal material already confirmed in the building inventory."
+            "Send one building document to the user. Pass document_file_name using an exact "
+            "name from media_inventory.documents returned by get_building_info. If the name "
+            "does not match, the tool returns the available names; retry with one of them."
         ),
         "strict": True,
         "parameters": {
@@ -290,21 +294,36 @@ def _basename(value: str) -> str:
     return filename or value
 
 
-def _pick_urls(urls: list[str], query: str, limit: int | None = None) -> list[str]:
-    normalized_query = normalize_catalog_name(query)
-    if normalized_query:
-        matches = [
-            url
-            for url in urls
-            if normalized_query in _normalize_path(url)
-            or normalized_query in normalize_catalog_name(_basename(url))
-        ]
-    else:
-        matches = []
-    selected = matches or urls
-    if limit is not None:
-        return selected[:limit]
-    return selected
+def _match_media(urls: list[str], requested: str, *, limit: int) -> list[str]:
+    """Resolve a requested media name against the building's media URLs.
+
+    Matching is intentionally layered and never falls back to "send anything":
+    1. exact normalized file-name match (the model is expected to pass a name
+       from the media_inventory exposed by get_building_info);
+    2. substring match as a fallback (e.g. photos requested by environment such
+       as "cozinha" still resolve to "imagem_cozinha.jpg").
+    Returns an empty list when nothing matches, so the caller can report the
+    available options instead of delivering unrequested media.
+    """
+    normalized_request = normalize_catalog_name(requested)
+    if not normalized_request:
+        return []
+    exact = [
+        url for url in urls if normalize_catalog_name(_basename(url)) == normalized_request
+    ]
+    if exact:
+        return exact[:limit]
+    partial = [
+        url
+        for url in urls
+        if normalized_request in normalize_catalog_name(_basename(url))
+        or normalized_request in _normalize_path(url)
+    ]
+    return partial[:limit]
+
+
+def _media_names(urls: list[str]) -> list[str]:
+    return [_basename(url) for url in urls]
 
 
 def get_all_building(**kwargs: Any) -> ToolOutputResponse:
@@ -423,7 +442,9 @@ def send_photo_file(
     if building is None:
         return _not_found_response("send_photo_file", building_id)
 
-    selected_photos = _pick_urls(building.photos_url or [], str(parte_do_imovel), limit=2)
+    selected_photos = _match_media(
+        building.photos_url or [], str(parte_do_imovel), limit=2
+    )
     if not selected_photos:
         return ToolOutputResponse(
             False,
@@ -431,8 +452,12 @@ def send_photo_file(
                 "type": "send_photo_file",
                 "building_id": str(building.id),
                 "parte_do_imovel": str(parte_do_imovel).strip(),
-                "error": "No photos available for the requested building.",
+                "error": (
+                    "Nenhuma foto corresponde ao pedido. Escolha um dos arquivos "
+                    "disponiveis em available."
+                ),
                 "error_code": "media_not_found",
+                "available": _media_names(building.photos_url or []),
             },
         )
 
@@ -472,27 +497,25 @@ def send_video_file(
     if building is None:
         return _not_found_response("send_video_file", building_id)
 
-    requested_name = normalize_catalog_name(str(video_file_name))
-    selected_video = next(
-        (
-            url
-            for url in building.videos_url or []
-            if requested_name in normalize_catalog_name(_basename(url))
-            or requested_name in _normalize_path(url)
-        ),
-        None,
+    selected_videos = _match_media(
+        building.videos_url or [], str(video_file_name), limit=1
     )
-    if selected_video is None:
+    if not selected_videos:
         return ToolOutputResponse(
             False,
             {
                 "type": "send_video_file",
                 "building_id": str(building.id),
                 "video_file_name": str(video_file_name).strip(),
-                "error": "No video found for the requested building.",
+                "error": (
+                    "Nenhum video corresponde ao pedido. Escolha um dos arquivos "
+                    "disponiveis em available."
+                ),
                 "error_code": "media_not_found",
+                "available": _media_names(building.videos_url or []),
             },
         )
+    selected_video = selected_videos[0]
 
     return ToolOutputResponse(
         True,
@@ -532,27 +555,25 @@ def send_building_document(
     if building is None:
         return _not_found_response("send_building_document", building_id)
 
-    requested_name = normalize_catalog_name(str(document_file_name))
-    selected_document = next(
-        (
-            url
-            for url in building.documents_url or []
-            if requested_name in normalize_catalog_name(_basename(url))
-            or requested_name in _normalize_path(url)
-        ),
-        None,
+    selected_documents = _match_media(
+        building.documents_url or [], str(document_file_name), limit=1
     )
-    if selected_document is None:
+    if not selected_documents:
         return ToolOutputResponse(
             False,
             {
                 "type": "send_building_document",
                 "building_id": str(building.id),
                 "document_file_name": str(document_file_name).strip(),
-                "error": "No document found for the requested building.",
+                "error": (
+                    "Nenhum documento corresponde ao pedido. Escolha um dos arquivos "
+                    "disponiveis em available."
+                ),
                 "error_code": "media_not_found",
+                "available": _media_names(building.documents_url or []),
             },
         )
+    selected_document = selected_documents[0]
 
     return ToolOutputResponse(
         True,
