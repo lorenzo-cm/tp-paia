@@ -2,7 +2,6 @@ import asyncio
 import json
 import logging
 import time
-from dataclasses import dataclass
 from typing import Any
 
 from sqlmodel import Session
@@ -21,7 +20,7 @@ from app.services.agent.base import (
     ToolResult,
 )
 from app.services.agent.guardrails import build_model_user_text, inspect_user_text
-from app.services.agent.response_guardrails import SAFE_FALLBACK, sanitize_customer_text
+from app.services.agent.response_guardrails import sanitize_customer_text
 from app.services.agent.tool_guardrails import validate_tool_call
 from app.services.message_processing.deps import Repos
 from app.services.message_processing.mappers import to_agent_messages
@@ -42,16 +41,6 @@ VALID_LEAD_QUALITIES = {quality.value for quality in LeadQuality}
 
 def _supports_open_conversation(sender: OutboundSender) -> bool:
     return callable(getattr(sender, "open_conversation", None))
-
-
-@dataclass
-class ParsedAgentReply:
-    customer_text: str
-    lead_quality: LeadQuality | None = None
-    qualification_reason: str | None = None
-    conversation_concluded: bool = False
-    contract_valid: bool = False
-    validation_error: str | None = None
 
 
 async def invoke_agent(
@@ -121,23 +110,9 @@ async def invoke_agent(
         )
     )
     response = await agent.run(history, user_msg, tool_context=tool_context)
-    parsed = _parse_agent_reply(response.text)
-    if not parsed.contract_valid:
-        _record_structured_output_failure(
-            raw_text=response.text,
-            parsed=parsed,
-            context=context,
-            repos=repos,
-        )
-        parsed.customer_text = SAFE_FALLBACK
-        _record_guardrail_event(
-            context=context,
-            repos=repos,
-            event="agent_output_sanitized",
-            payload={"reason": "invalid_structured_output"},
-        )
-    sanitized_text, sanitized = sanitize_customer_text(parsed.customer_text)
-    parsed.customer_text = sanitized_text
+    # O agente responde texto livre para o cliente; a qualificacao do lead e
+    # persistida quando ele chama a tool set_lead_quality (ver _execute_tool).
+    customer_text, sanitized = sanitize_customer_text(response.text)
     if sanitized:
         _record_guardrail_event(
             context=context,
@@ -150,26 +125,12 @@ async def invoke_agent(
             conversation_id=context.conversation_id,
             sender_participant_id=context.bot_participant_id,
             sender_type=SenderType.ASSISTANT,
-            content=parsed.customer_text,
+            content=customer_text,
         )
     )
     db.commit()
-    await asyncio.to_thread(sender.send_message, context.conv_ext_id, parsed.customer_text)
+    await asyncio.to_thread(sender.send_message, context.conv_ext_id, customer_text)
     response_time_ms = int((time.monotonic() - response_started) * 1000)
-    handoff_succeeded = any(
-        event["tool_name"] == "transfer_human" and event["result"].get("success")
-        for event in tool_events
-    )
-    if parsed.contract_valid and not handoff_succeeded and (
-        parsed.lead_quality is not None or parsed.qualification_reason is not None
-    ):
-        repos.metric.update_lead_quality(
-            context.conversation_id,
-            parsed.lead_quality,
-            parsed.qualification_reason,
-        )
-    if parsed.contract_valid and parsed.conversation_concluded and not handoff_succeeded:
-        repos.metric.mark_retained(context.conversation_id)
     repos.metric.record_response_time(context.conversation_id, response_time_ms)
     db.commit()
 
@@ -273,6 +234,15 @@ async def _execute_tool(
         result = {**result, "media_events": media_events}
 
     repos.metric.increment_tool_usage(context.conversation_id, tool_name)
+    if tool_name == "set_lead_quality" and result.get("success"):
+        lead_quality = _parse_lead_quality(arguments.get("lead_quality"))
+        qualification_reason = str(arguments.get("qualification_reason") or "").strip()
+        if lead_quality is not None and qualification_reason:
+            repos.metric.update_lead_quality(
+                context.conversation_id,
+                lead_quality,
+                qualification_reason,
+            )
     if tool_name == "transfer_human" and result.get("success"):
         lead_quality = _parse_lead_quality(arguments.get("lead_quality"))
         qualification_reason = str(arguments.get("qualification_reason") or "").strip()
@@ -403,114 +373,6 @@ def _format_rag_context(rag_context: list[object]) -> str:
     return "\n".join(lines)
 
 
-def _parse_agent_reply(raw_text: str) -> ParsedAgentReply:
-    stripped = raw_text.strip()
-    if not stripped:
-        return ParsedAgentReply(
-            customer_text="",
-            validation_error="empty_response",
-        )
-    try:
-        payload = json.loads(stripped)
-    except json.JSONDecodeError:
-        return ParsedAgentReply(
-            customer_text=raw_text,
-            validation_error="invalid_json",
-        )
-    if not isinstance(payload, dict):
-        return ParsedAgentReply(
-            customer_text=raw_text,
-            validation_error="json_root_must_be_object",
-        )
-    response_value = payload.get("response")
-    response_text = response_value.strip() if isinstance(response_value, str) else ""
-    customer_text = response_text or raw_text
-    required_keys = {
-        "response",
-        "lead_quality",
-        "qualification_reason",
-        "conversation_concluded",
-    }
-    if set(payload) != required_keys:
-        return ParsedAgentReply(
-            customer_text=customer_text,
-            validation_error="invalid_keys",
-        )
-    lead_quality = _parse_lead_quality(payload.get("lead_quality"))
-    qualification_reason = _parse_qualification_reason(
-        payload.get("qualification_reason")
-    )
-    conversation_concluded = payload.get("conversation_concluded")
-    if not response_text:
-        validation_error = "invalid_response"
-    elif lead_quality is None:
-        validation_error = "invalid_lead_quality"
-    elif qualification_reason is None:
-        validation_error = "invalid_qualification_reason"
-    elif not isinstance(conversation_concluded, bool):
-        validation_error = "invalid_conversation_concluded"
-    else:
-        validation_error = None
-    if validation_error is not None:
-        return ParsedAgentReply(
-            customer_text=customer_text,
-            validation_error=validation_error,
-        )
-    return ParsedAgentReply(
-        customer_text=response_text,
-        lead_quality=lead_quality,
-        qualification_reason=qualification_reason,
-        conversation_concluded=conversation_concluded,
-        contract_valid=True,
-    )
-
-
-def _record_structured_output_failure(
-    *,
-    raw_text: str,
-    parsed: ParsedAgentReply,
-    context: ConversationContext,
-    repos: Repos,
-) -> None:
-    logger.warning(
-        "agent structured output validation failed",
-        extra={
-            "conversation_id": str(context.conversation_id),
-            "validation_error": parsed.validation_error,
-        },
-    )
-    repos.message.create(
-        MessageCreate(
-            conversation_id=context.conversation_id,
-            sender_participant_id=context.bot_participant_id,
-            sender_type=SenderType.SYSTEM,
-            content=json.dumps(
-                {
-                    "error": parsed.validation_error,
-                    "raw_response": raw_text,
-                },
-                ensure_ascii=False,
-            ),
-            meta={
-                "event": "agent_structured_output_invalid",
-                "validation_error": parsed.validation_error,
-            },
-        )
-    )
-    conversation = repos.conversation.get(context.conversation_id)
-    current_meta = conversation.meta if conversation and conversation.meta else {}
-    repos.conversation.update(
-        ConversationUpdate(
-            id=context.conversation_id,
-            meta={
-                **DEFAULT_CONVERSATION_META,
-                **current_meta,
-                "last_system_error": "agent_structured_output_invalid",
-            },
-        )
-    )
-
-
 def _record_guardrail_event(
     *,
     context: ConversationContext,
@@ -544,10 +406,3 @@ def _parse_lead_quality(value: Any) -> LeadQuality | None:
     if normalized not in VALID_LEAD_QUALITIES:
         return None
     return LeadQuality(normalized)
-
-
-def _parse_qualification_reason(value: Any) -> str | None:
-    if value is None:
-        return None
-    text = str(value).strip()
-    return text or None

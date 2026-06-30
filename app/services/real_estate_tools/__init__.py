@@ -8,6 +8,7 @@ from .tools import (
     send_building_document,
     send_photo_file,
     send_video_file,
+    set_lead_quality,
     store_lead_house,
     transfer_human,
 )
@@ -22,6 +23,7 @@ __all__ = [
     "send_building_document",
     "send_photo_file",
     "send_video_file",
+    "set_lead_quality",
     "store_lead_house",
     "transfer_human",
 ]

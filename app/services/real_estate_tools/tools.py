@@ -188,6 +188,30 @@ REAL_ESTATE_TOOLS: list[dict[str, Any]] = [
             ],
         },
     },
+    {
+        "type": "function",
+        "name": "set_lead_quality",
+        "description": (
+            "Register or update the qualification of the current lead. "
+            "Call whenever the lead qualification changes based on the conversation "
+            "(interest level, fit, urgency). Does not send any message to the user."
+        ),
+        "strict": False,
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "lead_quality": {
+                    "type": "string",
+                    "enum": ["low", "medium", "high"],
+                },
+                "qualification_reason": {
+                    "type": "string",
+                    "description": "Short, objective reason for the qualification.",
+                },
+            },
+            "required": ["lead_quality", "qualification_reason"],
+        },
+    },
 ]
 
 
@@ -621,6 +645,43 @@ def transfer_human(
     )
 
 
+def set_lead_quality(
+    lead_quality: str | None = None,
+    qualification_reason: str | None = None,
+    **kwargs: Any,
+) -> ToolOutputResponse:
+    _ = kwargs
+    missing_fields: list[str] = []
+    if _is_blank(lead_quality):
+        missing_fields.append("lead_quality")
+    if _is_blank(qualification_reason):
+        missing_fields.append("qualification_reason")
+    if missing_fields:
+        return _missing_required_fields_response("set_lead_quality", missing_fields)
+    normalized_lead_quality = str(lead_quality).strip().lower()
+    if normalized_lead_quality not in VALID_LEAD_QUALITIES:
+        return ToolOutputResponse(
+            False,
+            {
+                "error": "lead_quality invalido para set_lead_quality.",
+                "error_code": "invalid_lead_quality",
+                "lead_quality": lead_quality,
+                "allowed_values": sorted(VALID_LEAD_QUALITIES),
+                "tool": "set_lead_quality",
+            },
+        )
+    return ToolOutputResponse(
+        True,
+        {
+            "type": "set_lead_quality",
+            "lead_quality": normalized_lead_quality,
+            "qualification_reason": str(qualification_reason).strip(),
+            "status": "lead_quality_registered",
+        },
+        summary="Qualificacao do lead registrada.",
+    )
+
+
 REAL_ESTATE_TOOL_REGISTRY: dict[str, Callable[..., ToolOutputResponse]] = {
     "get_all_building": get_all_building,
     "get_building_info": get_building_info,
@@ -630,4 +691,5 @@ REAL_ESTATE_TOOL_REGISTRY: dict[str, Callable[..., ToolOutputResponse]] = {
     "send_building_document": send_building_document,
     "store_lead_house": store_lead_house,
     "transfer_human": transfer_human,
+    "set_lead_quality": set_lead_quality,
 }

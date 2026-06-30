@@ -9,7 +9,7 @@ class Settings(BaseSettings):
     # Application settings
     PROJECT_NAME: str = "Projeto de PAIA"
     VERSION: str = "1.0.0"
-    API_PREFIX: str = "/api/prefix"
+    API_PREFIX: str = ""
 
     # .env config
     model_config = SettingsConfigDict(

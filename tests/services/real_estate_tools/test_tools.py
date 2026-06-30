@@ -19,6 +19,7 @@ from app.services.real_estate_tools import (
     send_building_document,
     send_photo_file,
     send_video_file,
+    set_lead_quality,
     store_lead_house,
     transfer_human,
 )
@@ -88,6 +89,7 @@ def test_tool_definitions_have_expected_names_and_fields() -> None:
         "send_building_document",
         "store_lead_house",
         "transfer_human",
+        "set_lead_quality",
     ]
     assert _definition("get_building_info")["parameters"]["required"] == ["building_id"]
     assert _definition("send_photo_file")["parameters"]["required"] == [
@@ -121,6 +123,7 @@ def test_tool_registry_contains_all_real_tools() -> None:
         "send_building_document",
         "store_lead_house",
         "transfer_human",
+        "set_lead_quality",
     }
 
 
@@ -285,3 +288,36 @@ def test_store_lead_house_rejects_invalid_building_id() -> None:
     assert result["success"] is False
     assert result["tool_output"]["error_code"] == "invalid_building_id"
     assert result["tool_output"]["building_id"] == "abc"
+
+
+def test_set_lead_quality_returns_valid_structure_when_complete() -> None:
+    result = set_lead_quality(
+        lead_quality="High",
+        qualification_reason="Lead engajado e com interesse claro.",
+    )
+    assert result == {
+        "success": True,
+        "tool_output": {
+            "type": "set_lead_quality",
+            "lead_quality": "high",
+            "qualification_reason": "Lead engajado e com interesse claro.",
+            "status": "lead_quality_registered",
+        },
+        "summary": "Qualificacao do lead registrada.",
+    }
+
+
+def test_set_lead_quality_requires_qualification_reason() -> None:
+    result = set_lead_quality(lead_quality="medium")
+    assert result["success"] is False
+    assert result["tool_output"]["error_code"] == "missing_required_fields"
+    assert result["tool_output"]["missing_fields"] == ["qualification_reason"]
+
+
+def test_set_lead_quality_rejects_invalid_lead_quality() -> None:
+    result = set_lead_quality(
+        lead_quality="urgent",
+        qualification_reason="Pediu visita.",
+    )
+    assert result["success"] is False
+    assert result["tool_output"]["error_code"] == "invalid_lead_quality"

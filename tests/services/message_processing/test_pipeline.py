@@ -244,7 +244,7 @@ def _load(engine: Engine, ext_conv_id: int) -> dict[str, Any]:
 # --- tests ----------------------------------------------------------------
 
 
-async def test_plain_text_agent_output_uses_safe_fallback_and_records_failure(
+async def test_plain_text_agent_output_is_sent_to_customer(
     clean_engine: Engine,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
@@ -254,7 +254,7 @@ async def test_plain_text_agent_output_uses_safe_fallback_and_records_failure(
     monkeypatch.setattr(
         invoke_agent_module, "time", SimpleNamespace(monotonic=lambda: 10.75)
     )
-    agent = FakeAgent(reply="hello from agent")
+    agent = FakeAgent(reply="Ola! Como posso ajudar com nossos imoveis?")
     sender = FakeSender()
     msg = _inbound(ext_msg_id="1", ext_conv_id="9001", text="Hi")
     pipe = _make_pipeline(clean_engine, debouncer=FakeDebouncer([msg]), agent=agent)
@@ -264,14 +264,9 @@ async def test_plain_text_agent_output_uses_safe_fallback_and_records_failure(
     state = _load(clean_engine, 9001)
     assert [m.content for m in state["user"]] == ["Hi"]
     assert [m.content for m in state["assistant"]] == [
-        "Nao consegui confirmar isso agora com seguranca. Se quiser, posso buscar outro detalhe do imovel ou encaminhar para atendimento humano."
+        "Ola! Como posso ajudar com nossos imoveis?"
     ]
-    assert sender.calls == [
-        (
-            9001,
-            "Nao consegui confirmar isso agora com seguranca. Se quiser, posso buscar outro detalhe do imovel ou encaminhar para atendimento humano.",
-        )
-    ]
+    assert sender.calls == [(9001, "Ola! Como posso ajudar com nossos imoveis?")]
     assert len(agent.calls) == 1
     metric = state["metric"]
     assert metric is not None
@@ -283,7 +278,7 @@ async def test_plain_text_agent_output_uses_safe_fallback_and_records_failure(
 async def test_prompt_injection_strong_returns_safe_refusal(
     clean_engine: Engine,
 ) -> None:
-    agent = FakeAgent(reply='{"response":"ignorar","lead_quality":"low","qualification_reason":"x","conversation_concluded":false}')
+    agent = FakeAgent(reply="ignorar")
     sender = FakeSender()
     msg = _inbound(
         ext_msg_id="9",
@@ -304,10 +299,10 @@ async def test_prompt_injection_strong_returns_safe_refusal(
     )
 
 
-async def test_invalid_structured_output_and_technical_text_are_sanitized(
+async def test_technical_text_in_agent_output_is_sanitized(
     clean_engine: Engine,
 ) -> None:
-    agent = FakeAgent(reply='{"oops":"traceback invalid_arguments building_id=123"}')
+    agent = FakeAgent(reply="traceback invalid_arguments building_id=123")
     sender = FakeSender()
     msg = _inbound(ext_msg_id="10", ext_conv_id="9010", text="Quero detalhes")
     pipe = _make_pipeline(clean_engine, debouncer=FakeDebouncer([msg]), agent=agent)
@@ -317,10 +312,6 @@ async def test_invalid_structured_output_and_technical_text_are_sanitized(
     state = _load(clean_engine, 9010)
     assert "traceback" not in state["assistant"][0].content.lower()
     assert "invalid_arguments" not in state["assistant"][0].content.lower()
-    assert any(
-        message.meta and message.meta.get("event") == "agent_structured_output_invalid"
-        for message in state["system"]
-    )
     assert any(
         message.meta and message.meta.get("event") == "agent_output_sanitized"
         for message in state["system"]
@@ -506,97 +497,62 @@ async def test_non_final_debounce_returns_without_touching_db(
     assert state["assistant"] == []
 
 
-async def test_agent_structured_output_updates_lead_quality_and_marks_retained(
+async def test_set_lead_quality_tool_updates_metric(
     clean_engine: Engine,
 ) -> None:
-    agent = FakeAgent(
-        reply=(
-            '{"response":"Perfeito, atendimento concluido.","lead_quality":"medium",'
-            '"qualification_reason":"Lead engajado e com interesse claro.",'
-            '"conversation_concluded":true}'
-        )
-    )
+    class FakeLeadQualityAgent(FakeAgent):
+        async def run(self, history: Any, user_message: Any, **kwargs: Any) -> AgentResponse:
+            tool_context = kwargs["tool_context"]
+            await tool_context.execute_tool(
+                "set_lead_quality",
+                {
+                    "lead_quality": "medium",
+                    "qualification_reason": "Lead engajado e com interesse claro.",
+                },
+            )
+            return AgentResponse(
+                text="Perfeito, posso te ajudar com mais detalhes?",
+                model="fake-model",
+            )
+
     sender = FakeSender()
     msg = _inbound(ext_msg_id="1", ext_conv_id="9011", text="Obrigado")
-    pipe = _make_pipeline(clean_engine, debouncer=FakeDebouncer([msg]), agent=agent)
+    pipe = _make_pipeline(
+        clean_engine, debouncer=FakeDebouncer([msg]), agent=FakeLeadQualityAgent()
+    )
 
     await pipe.process(msg, sender, FakeMediaFetcher())
 
     state = _load(clean_engine, 9011)
-    assert [m.content for m in state["assistant"]] == ["Perfeito, atendimento concluido."]
+    assert [m.content for m in state["assistant"]] == [
+        "Perfeito, posso te ajudar com mais detalhes?"
+    ]
     metric = state["metric"]
     assert metric is not None
     assert metric.lead_quality == LeadQuality.MEDIUM
     assert metric.qualification_reason == "Lead engajado e com interesse claro."
-    assert metric.final_outcome == FinalOutcome.RETAINED
-    assert metric.closed_at is not None
+    assert metric.tool_usage == {"set_lead_quality": 1}
 
 
-async def test_plain_text_agent_output_uses_safe_fallback_and_records_contract_failure(
+async def test_plain_text_output_records_no_structured_output_failure(
     clean_engine: Engine,
-    caplog: pytest.LogCaptureFixture,
 ) -> None:
     agent = FakeAgent(reply="Resposta preservada para o cliente.")
     sender = FakeSender()
     msg = _inbound(ext_msg_id="1", ext_conv_id="9013", text="Tenho interesse")
     pipe = _make_pipeline(clean_engine, debouncer=FakeDebouncer([msg]), agent=agent)
 
-    with caplog.at_level(logging.WARNING, logger=invoke_agent_module.__name__):
-        await pipe.process(msg, sender, FakeMediaFetcher())
-
-    state = _load(clean_engine, 9013)
-    assert sender.calls == [
-        (
-            9013,
-            "Nao consegui confirmar isso agora com seguranca. Se quiser, posso buscar outro detalhe do imovel ou encaminhar para atendimento humano.",
-        )
-    ]
-    assert [message.content for message in state["assistant"]] == [
-        "Nao consegui confirmar isso agora com seguranca. Se quiser, posso buscar outro detalhe do imovel ou encaminhar para atendimento humano."
-    ]
-    assert state["metric"].lead_quality is None
-    assert state["metric"].final_outcome is None
-    assert state["system"][0].meta == {
-        "event": "agent_structured_output_invalid",
-        "validation_error": "invalid_json",
-    }
-    assert any(
-        message.meta and message.meta.get("event") == "agent_output_sanitized"
-        for message in state["system"]
-    )
-    assert state["conversation"].meta["last_system_error"] == (
-        "agent_structured_output_invalid"
-    )
-    assert "agent structured output validation failed" in caplog.text
-
-
-async def test_invalid_conversation_concluded_does_not_mark_retained(
-    clean_engine: Engine,
-) -> None:
-    agent = FakeAgent(
-        reply=(
-            '{"response":"Continuamos por aqui.","lead_quality":"high",'
-            '"qualification_reason":"Lead interessado.",'
-            '"conversation_concluded":"false"}'
-        )
-    )
-    sender = FakeSender()
-    msg = _inbound(ext_msg_id="1", ext_conv_id="9014", text="Certo")
-    pipe = _make_pipeline(clean_engine, debouncer=FakeDebouncer([msg]), agent=agent)
-
     await pipe.process(msg, sender, FakeMediaFetcher())
 
-    state = _load(clean_engine, 9014)
-    assert sender.calls == [
-        (
-            9014,
-            "Nao consegui confirmar isso agora com seguranca. Se quiser, posso buscar outro detalhe do imovel ou encaminhar para atendimento humano.",
-        )
+    state = _load(clean_engine, 9013)
+    assert sender.calls == [(9013, "Resposta preservada para o cliente.")]
+    assert [message.content for message in state["assistant"]] == [
+        "Resposta preservada para o cliente."
     ]
-    assert state["metric"].lead_quality is None
-    assert state["metric"].final_outcome is None
-    assert state["system"][0].meta["validation_error"] == (
-        "invalid_conversation_concluded"
+    assert not any(
+        message.meta
+        and message.meta.get("event") == "agent_structured_output_invalid"
+        for message in state["system"]
     )
 
 
@@ -616,11 +572,7 @@ async def test_tool_handoff_updates_metrics_and_counts_tool_usage(
                 },
             )
             return AgentResponse(
-                text=(
-                    '{"response":"Vou encaminhar seu atendimento.","lead_quality":"high",'
-                    '"qualification_reason":"Pediu visita e proposta.",'
-                    '"conversation_concluded":false}'
-                ),
+                text="Vou encaminhar seu atendimento.",
                 model="fake-model",
             )
 
