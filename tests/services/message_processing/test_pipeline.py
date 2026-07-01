@@ -534,6 +534,79 @@ async def test_set_lead_quality_tool_updates_metric(
     assert metric.tool_usage == {"set_lead_quality": 1}
 
 
+async def test_duplicate_set_lead_quality_does_not_count_again(
+    clean_engine: Engine,
+) -> None:
+    class FakeDuplicateLeadQualityAgent(FakeAgent):
+        async def run(self, history: Any, user_message: Any, **kwargs: Any) -> AgentResponse:
+            tool_context = kwargs["tool_context"]
+            arguments = {
+                "lead_quality": "low",
+                "qualification_reason": "Usuario esta apenas pesquisando.",
+            }
+            await tool_context.execute_tool("set_lead_quality", arguments)
+            await tool_context.execute_tool("set_lead_quality", arguments)
+            return AgentResponse(text="Sem problemas, sigo por aqui.", model="fake-model")
+
+    sender = FakeSender()
+    msg = _inbound(ext_msg_id="1", ext_conv_id="9014", text="Estou so pesquisando")
+    pipe = _make_pipeline(
+        clean_engine,
+        debouncer=FakeDebouncer([msg]),
+        agent=FakeDuplicateLeadQualityAgent(),
+    )
+
+    await pipe.process(msg, sender, FakeMediaFetcher())
+
+    state = _load(clean_engine, 9014)
+    metric = state["metric"]
+    assert metric is not None
+    assert metric.lead_quality == LeadQuality.LOW
+    assert metric.tool_usage == {"set_lead_quality": 1}
+    assert any(
+        message.meta and message.meta.get("event") == "duplicate_lead_quality_ignored"
+        for message in state["system"]
+    )
+
+
+async def test_low_intent_clean_close_marks_retained(
+    clean_engine: Engine,
+) -> None:
+    class FakeLowIntentCloseAgent(FakeAgent):
+        async def run(self, history: Any, user_message: Any, **kwargs: Any) -> AgentResponse:
+            tool_context = kwargs["tool_context"]
+            await tool_context.execute_tool(
+                "set_lead_quality",
+                {
+                    "lead_quality": "low",
+                    "qualification_reason": "Usuario esta apenas pesquisando.",
+                },
+            )
+            return AgentResponse(text="Fico a disposicao no futuro.", model="fake-model")
+
+    sender = FakeSender()
+    msg = _inbound(
+        ext_msg_id="1",
+        ext_conv_id="9015",
+        text="Obrigado, era mais para estudo mesmo. Nao quero seguir com atendimento agora.",
+    )
+    pipe = _make_pipeline(
+        clean_engine,
+        debouncer=FakeDebouncer([msg]),
+        agent=FakeLowIntentCloseAgent(),
+    )
+
+    await pipe.process(msg, sender, FakeMediaFetcher())
+
+    state = _load(clean_engine, 9015)
+    metric = state["metric"]
+    assert metric is not None
+    assert metric.lead_quality == LeadQuality.LOW
+    assert metric.final_outcome == FinalOutcome.RETAINED
+    assert metric.closed_at is not None
+    assert metric.tool_usage == {"set_lead_quality": 1}
+
+
 async def test_plain_text_output_records_no_structured_output_failure(
     clean_engine: Engine,
 ) -> None:

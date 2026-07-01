@@ -1,0 +1,199 @@
+{
+  "conversation_id": "b79f9576-a76f-4f28-bbba-2e139f4b543f",
+  "lead_quality": null,
+  "qualification_reason": null,
+  "final_outcome": null,
+  "used_human_transfer": false,
+  "response_time_min_ms": 7810,
+  "response_time_max_ms": 10394,
+  "response_time_count": 7,
+  "tool_usage": {
+    "get_all_building": 1,
+    "search_building_information": 1
+  },
+  "created_at": "2026-07-01T19:11:09.338668+00:00",
+  "updated_at": "2026-07-01T19:17:44.029059+00:00",
+  "closed_at": null,
+  "transcript": [
+    {
+      "message_id": "41e2efb6-7793-4076-81e8-449c372e2269",
+      "external_message_id": 140471,
+      "sender_type": "user",
+      "interaction_type": "chat",
+      "content": "oi",
+      "created_at": "2026-07-01T19:11:09.340452+00:00",
+      "sent_at": "2026-07-01T19:11:09.340390+00:00"
+    },
+    {
+      "message_id": "ff0aca23-214b-4f98-9b17-3e4e5e326547",
+      "external_message_id": null,
+      "sender_type": "assistant",
+      "interaction_type": "chat",
+      "content": "Olá! Como posso ajudar você hoje em relação aos imóveis? Está procurando alguma coisa específica?",
+      "created_at": "2026-07-01T19:11:12.511191+00:00",
+      "sent_at": "2026-07-01T19:11:12.511089+00:00"
+    },
+    {
+      "message_id": "5a858ade-6e77-43ef-a49f-a5c3979769fe",
+      "external_message_id": 1072901,
+      "sender_type": "user",
+      "interaction_type": "chat",
+      "content": "Nao quero comprar agora. Estou so pesquisando para entender melhor o mercado.",
+      "created_at": "2026-07-01T19:16:11.260457+00:00",
+      "sent_at": "2026-07-01T19:16:11.260294+00:00"
+    },
+    {
+      "message_id": "2fcf31b0-b927-4529-8a2f-30c391306ff3",
+      "external_message_id": null,
+      "sender_type": "assistant",
+      "interaction_type": "chat",
+      "content": "Sem problemas! Posso ajudar a entender os tipos de imóveis disponíveis ou responder qualquer dúvida que você tenha sobre o mercado. Se estiver interessado em ver alguns exemplos, posso mostrar opções do nosso catálogo. Como posso ajudar nessa pesquisa?",
+      "created_at": "2026-07-01T19:16:14.370380+00:00",
+      "sent_at": "2026-07-01T19:16:14.370317+00:00"
+    },
+    {
+      "message_id": "10187286-4cbc-4f14-8358-25d43c96a6a7",
+      "external_message_id": 1072902,
+      "sender_type": "user",
+      "interaction_type": "chat",
+      "content": "Em poucas palavras, qual a diferenca pratica entre um apartamento compacto, uma casa maior e um imovel de praia?",
+      "created_at": "2026-07-01T19:16:29.230322+00:00",
+      "sent_at": "2026-07-01T19:16:29.230020+00:00"
+    },
+    {
+      "message_id": "3e387f23-a674-4b37-a094-171050c6e976",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "chat",
+      "content": "{\"raw_preview\": \"Vamos lá! Aqui estão algumas diferenças práticas:\\n\\n- **Apartamento Compacto**: Ideal para quem busca praticidade e mobilidade urbana. Costuma ser mais fácil de manter e geralmente está localizado em á\"}",
+      "created_at": "2026-07-01T19:16:32.332562+00:00",
+      "sent_at": "2026-07-01T19:16:32.332315+00:00"
+    },
+    {
+      "message_id": "a1c4f3d0-dc2c-4bee-a679-4c13ca654350",
+      "external_message_id": null,
+      "sender_type": "assistant",
+      "interaction_type": "chat",
+      "content": "Vamos lá! Aqui estão algumas diferenças práticas: - Apartamento Compacto: Ideal para quem busca praticidade e mobilidade urbana. Costuma ser mais fácil de manter e geralmente está localizado em áreas centrais. - Casa Maior: Oferece mais espaço, ideal para famílias ou quem precisa de mais ambiente para lazer e trabalho. Pode incluir jardins e áreas externas. - Imóvel de Praia: Focado no lazer e descanso, geralmente localizado em regiões litorâneas. Ideal para quem busca um refúgio de fim de semana. Posso ajudar com mais alguma coisa ou mostrar exemplos disso no nosso catálogo?",
+      "created_at": "2026-07-01T19:16:32.339042+00:00",
+      "sent_at": "2026-07-01T19:16:32.338754+00:00"
+    },
+    {
+      "message_id": "3678c185-3c99-470c-b0e6-faa2fb9e6e1a",
+      "external_message_id": 1072903,
+      "sender_type": "user",
+      "interaction_type": "chat",
+      "content": "Pode listar os empreendimentos que voces tem, mas sem tentar me empurrar visita ou corretor agora?",
+      "created_at": "2026-07-01T19:16:47.233737+00:00",
+      "sent_at": "2026-07-01T19:16:47.233449+00:00"
+    },
+    {
+      "message_id": "c4147585-55e3-4d04-956d-0319f10bab1e",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "tool_call",
+      "content": "{\"name\": \"get_all_building\", \"arguments\": {}}",
+      "created_at": "2026-07-01T19:16:50.031434+00:00",
+      "sent_at": "2026-07-01T19:16:50.031372+00:00"
+    },
+    {
+      "message_id": "b4e4005c-dd93-486a-8e4e-7eef84e1bd74",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "tool_response",
+      "content": "{\"success\": true, \"tool_output\": {\"building_list\": [{\"building_id\": \"63687211-4308-461f-8a46-5ac69612b9d2\", \"building_name\": \"Brisa do Mar Residence\", \"source_url\": \"https://example.com/brisa-do-mar-residence\"}, {\"building_id\": \"9da89b19-928d-4685-b026-6858c76b194f\", \"building_name\": \"Casa Mirante das Palmeiras\", \"source_url\": \"https://example.com/casa-mirante-das-palmeiras\"}, {\"building_id\": \"b9fb3022-2f05-4832-b3d4-c8aa38dd3565\", \"building_name\": \"Residencial Aurora\", \"source_url\": \"https://example.com/residencial-aurora\"}], \"building_map\": {\"brisa do mar residence\": \"63687211-4308-461f-8a46-5ac69612b9d2\", \"casa mirante das palmeiras\": \"9da89b19-928d-4685-b026-6858c76b194f\", \"residencial aurora\": \"b9fb3022-2f05-4832-b3d4-c8aa38dd3565\"}}, \"summary\": \"Lista de empreendimentos carregada.\"}",
+      "created_at": "2026-07-01T19:16:50.045259+00:00",
+      "sent_at": "2026-07-01T19:16:50.045201+00:00"
+    },
+    {
+      "message_id": "a2834705-b191-41d5-8daf-1eb041ccc0f3",
+      "external_message_id": null,
+      "sender_type": "assistant",
+      "interaction_type": "chat",
+      "content": "Aqui estão alguns empreendimentos que temos disponíveis: - Brisa do Mar Residence - Casa Mirante das Palmeiras - Residencial Aurora Se você se interessar por algum ou quiser mais informações, é só me avisar!",
+      "created_at": "2026-07-01T19:16:52.043582+00:00",
+      "sent_at": "2026-07-01T19:16:52.043364+00:00"
+    },
+    {
+      "message_id": "1561a972-0d22-496b-83f0-4f2a3100a800",
+      "external_message_id": 1072904,
+      "sender_type": "user",
+      "interaction_type": "chat",
+      "content": "Se eu fosse so acompanhar o mercado por alguns meses, o que vale observar nesses imoveis? Se nao tiver algum dado no cadastro, prefiro que voce diga isso.",
+      "created_at": "2026-07-01T19:17:05.237822+00:00",
+      "sent_at": "2026-07-01T19:17:05.237512+00:00"
+    },
+    {
+      "message_id": "b94647cd-ce9c-4c85-8d1c-b1e03ea3642e",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "chat",
+      "content": "{\"raw_preview\": \"Para acompanhar o mercado ao longo dos meses, vale observar alguns aspectos:\\n\\n- **Valorização:** Verifique se há tendência de aumento nos preços na região.\\n- **Localização:** Veja a proximidade com se\"}",
+      "created_at": "2026-07-01T19:17:08.038904+00:00",
+      "sent_at": "2026-07-01T19:17:08.038614+00:00"
+    },
+    {
+      "message_id": "c5059d65-fce7-4b33-803a-3a93b6bc5618",
+      "external_message_id": null,
+      "sender_type": "assistant",
+      "interaction_type": "chat",
+      "content": "Para acompanhar o mercado ao longo dos meses, vale observar alguns aspectos: - Valorização: Verifique se há tendência de aumento nos preços na região. - Localização: Veja a proximidade com serviços, trabalho e lazer. - Infraestrutura: Avalie as facilidades e comodidades próximas, como transporte, escolas e comércio. - Demanda e Oferta: Observe se há muito interesse por esses tipos de imóveis, o que pode refletir na valorização. - Condições Econômicas: Fatores econômicos mais amplos podem influenciar os preços. Se precisar de detalhes específicos sobre algum imóvel, é só me avisar!",
+      "created_at": "2026-07-01T19:17:08.044242+00:00",
+      "sent_at": "2026-07-01T19:17:08.044037+00:00"
+    },
+    {
+      "message_id": "73a6cc3a-5460-4e1b-b285-4c37897183dd",
+      "external_message_id": 1072905,
+      "sender_type": "user",
+      "interaction_type": "chat",
+      "content": "Tem algum exemplo do catalogo que ajude a visualizar esses criterios sem compromisso?",
+      "created_at": "2026-07-01T19:17:23.236385+00:00",
+      "sent_at": "2026-07-01T19:17:23.236189+00:00"
+    },
+    {
+      "message_id": "27b68a21-f78b-4161-8abb-c07ab2352aed",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "tool_call",
+      "content": "{\"name\": \"search_building_information\", \"arguments\": {\"query\": \"exemplo de valorização, localização, infraestrutura, demanda e oferta\"}}",
+      "created_at": "2026-07-01T19:17:24.999007+00:00",
+      "sent_at": "2026-07-01T19:17:24.998937+00:00"
+    },
+    {
+      "message_id": "e039811e-37ee-41c3-9642-fd8cc9bf3ca1",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "tool_response",
+      "content": "{\"success\": true, \"tool_output\": {\"type\": \"search_building_information\", \"query\": \"exemplo de valorização, localização, infraestrutura, demanda e oferta\", \"building_id\": null, \"matches\": [], \"context\": \"\"}, \"summary\": \"Trechos relevantes do catalogo recuperados.\"}",
+      "created_at": "2026-07-01T19:17:25.575405+00:00",
+      "sent_at": "2026-07-01T19:17:25.575232+00:00"
+    },
+    {
+      "message_id": "cf7fa473-3aed-47a6-90c6-cb93800e9db0",
+      "external_message_id": null,
+      "sender_type": "assistant",
+      "interaction_type": "chat",
+      "content": "No momento, o catálogo não confirma exemplos específicos desses critérios. Posso ajudar de outra maneira ou procurar algo mais específico para você?",
+      "created_at": "2026-07-01T19:17:28.101369+00:00",
+      "sent_at": "2026-07-01T19:17:28.101186+00:00"
+    },
+    {
+      "message_id": "16039b30-09b1-47c5-9546-03e88e19be95",
+      "external_message_id": 1072906,
+      "sender_type": "user",
+      "interaction_type": "chat",
+      "content": "Obrigado, era isso por enquanto. Nao quero seguir com atendimento agora.",
+      "created_at": "2026-07-01T19:17:41.240198+00:00",
+      "sent_at": "2026-07-01T19:17:41.240124+00:00"
+    },
+    {
+      "message_id": "eefa80c5-5375-4d33-864a-b81a62b0b893",
+      "external_message_id": null,
+      "sender_type": "assistant",
+      "interaction_type": "chat",
+      "content": "Tudo bem! Se precisar de mais informações no futuro, estou por aqui. Até mais!",
+      "created_at": "2026-07-01T19:17:43.512431+00:00",
+      "sent_at": "2026-07-01T19:17:43.512372+00:00"
+    }
+  ]
+}

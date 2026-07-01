@@ -1,0 +1,124 @@
+{
+  "conversation_id": "e2076f41-b7dc-4164-8882-0c74fd1a716e",
+  "lead_quality": null,
+  "qualification_reason": null,
+  "final_outcome": null,
+  "used_human_transfer": false,
+  "response_time_min_ms": 7655,
+  "response_time_max_ms": 10050,
+  "response_time_count": 6,
+  "tool_usage": {},
+  "created_at": "2026-07-01T21:24:22.857348+00:00",
+  "updated_at": "2026-07-01T21:26:29.177484+00:00",
+  "closed_at": null,
+  "transcript": [
+    {
+      "message_id": "5f5190bd-e30e-486b-b8e2-2b7cf3504fba",
+      "external_message_id": 140830,
+      "sender_type": "user",
+      "interaction_type": "chat",
+      "content": "oi",
+      "created_at": "2026-07-01T21:24:22.860215+00:00",
+      "sent_at": "2026-07-01T21:24:22.860125+00:00"
+    },
+    {
+      "message_id": "9bb8eebf-30a0-4e1e-a086-d23fb001225c",
+      "external_message_id": null,
+      "sender_type": "assistant",
+      "interaction_type": "chat",
+      "content": "Olá! Como posso te ajudar hoje com imóveis?",
+      "created_at": "2026-07-01T21:24:25.338967+00:00",
+      "sent_at": "2026-07-01T21:24:25.338641+00:00"
+    },
+    {
+      "message_id": "1b7e99ed-b182-45da-8ea2-21ba70b12dde",
+      "external_message_id": 1073501,
+      "sender_type": "user",
+      "interaction_type": "chat",
+      "content": "Oi, voces tambem ajudam com financiamento de carro?",
+      "created_at": "2026-07-01T21:25:12.150923+00:00",
+      "sent_at": "2026-07-01T21:25:12.150664+00:00"
+    },
+    {
+      "message_id": "47c16fe2-b127-431b-8015-6067496bada9",
+      "external_message_id": null,
+      "sender_type": "assistant",
+      "interaction_type": "chat",
+      "content": "Eu sou especializada em atendimento imobiliário. Para assuntos de financiamento de carro, recomendo procurar uma instituição financeira ou um especialista na área. Posso ajudar com algo relacionado a imóveis?",
+      "created_at": "2026-07-01T21:25:14.262545+00:00",
+      "sent_at": "2026-07-01T21:25:14.262421+00:00"
+    },
+    {
+      "message_id": "e1a1c932-334a-4d57-be14-d94dae2f3f87",
+      "external_message_id": 1073502,
+      "sender_type": "user",
+      "interaction_type": "chat",
+      "content": "E conseguem me dizer qual notebook vale mais a pena para edicao de video?",
+      "created_at": "2026-07-01T21:25:30.170493+00:00",
+      "sent_at": "2026-07-01T21:25:30.170183+00:00"
+    },
+    {
+      "message_id": "b3e1f723-63ad-4125-9a72-3877049d83b2",
+      "external_message_id": null,
+      "sender_type": "assistant",
+      "interaction_type": "chat",
+      "content": "Eu sou especializada em atendimento para imóveis. Infelizmente, não consigo ajudar com escolhas de notebooks. Posso responder a algo sobre imóveis ou empreendimentos?",
+      "created_at": "2026-07-01T21:25:32.968033+00:00",
+      "sent_at": "2026-07-01T21:25:32.967975+00:00"
+    },
+    {
+      "message_id": "73699885-71e2-43aa-b321-c907c007f2ed",
+      "external_message_id": 1073503,
+      "sender_type": "user",
+      "interaction_type": "chat",
+      "content": "Nao e sobre imovel mesmo. Quero uma orientacao geral sobre isso.",
+      "created_at": "2026-07-01T21:25:48.151267+00:00",
+      "sent_at": "2026-07-01T21:25:48.151191+00:00"
+    },
+    {
+      "message_id": "c39702ea-b87f-4ff1-a455-eefe45913208",
+      "external_message_id": null,
+      "sender_type": "assistant",
+      "interaction_type": "chat",
+      "content": "Para assuntos fora de imóveis, recomendo procurar suporte ou especialistas em suas áreas específicas. Se você precisar de informações sobre empreendimentos ou imóveis, estou aqui para ajudar!",
+      "created_at": "2026-07-01T21:25:50.314814+00:00",
+      "sent_at": "2026-07-01T21:25:50.314526+00:00"
+    },
+    {
+      "message_id": "a8dc7750-43da-42e2-8e89-8912275f7c0e",
+      "external_message_id": 1073504,
+      "sender_type": "user",
+      "interaction_type": "chat",
+      "content": "Entendi. Entao me passa para um atendimento humano para eu confirmar se voces tratam desse tipo de assunto.",
+      "created_at": "2026-07-01T21:26:06.178395+00:00",
+      "sent_at": "2026-07-01T21:26:06.178172+00:00"
+    },
+    {
+      "message_id": "93827ba8-1860-4854-b158-2018cefffc20",
+      "external_message_id": null,
+      "sender_type": "assistant",
+      "interaction_type": "chat",
+      "content": "Posso te ajudar apenas com imóveis. Se precisar de orientação ou quiser saber mais sobre empreendimentos, estou à disposição. Para outros assuntos, recomendo buscar o serviço especializado.",
+      "created_at": "2026-07-01T21:26:09.863266+00:00",
+      "sent_at": "2026-07-01T21:26:09.863005+00:00"
+    },
+    {
+      "message_id": "3619e39a-5221-4322-a88e-23d375970028",
+      "external_message_id": 1073505,
+      "sender_type": "user",
+      "interaction_type": "chat",
+      "content": "Meu email e leadorescopo35@example.com",
+      "created_at": "2026-07-01T21:26:24.145185+00:00",
+      "sent_at": "2026-07-01T21:26:24.145064+00:00"
+    },
+    {
+      "message_id": "f3e10c91-6dec-4cdd-8831-7bb12e20c7fe",
+      "external_message_id": null,
+      "sender_type": "assistant",
+      "interaction_type": "chat",
+      "content": "Para seguir com qualquer atendimento, precisarei saber mais sobre sua demanda específica relacionada a imóveis. Posso ajudar em algo ligado a empreendimentos ou imóveis?",
+      "created_at": "2026-07-01T21:26:28.614489+00:00",
+      "sent_at": "2026-07-01T21:26:28.614431+00:00"
+    }
+  ]
+}

@@ -28,3 +28,10 @@ def test_sanitize_customer_text_strips_markdown_artifacts() -> None:
 
     assert text == "Apartamento com boa ventilacao."
     assert replaced is True
+
+
+def test_sanitize_customer_text_strips_emoji() -> None:
+    text, replaced = sanitize_customer_text("Fico a disposicao no futuro. 😊")
+
+    assert text == "Fico a disposicao no futuro."
+    assert replaced is True

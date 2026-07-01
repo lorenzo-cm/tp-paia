@@ -1,0 +1,285 @@
+{
+  "conversation_id": "2ed2f6e3-74be-4763-a2e2-3355972af35c",
+  "lead_quality": "high",
+  "qualification_reason": "Cliente solicitou proposta e visita imediata.",
+  "final_outcome": "handoff",
+  "used_human_transfer": true,
+  "response_time_min_ms": 8229,
+  "response_time_max_ms": 14449,
+  "response_time_count": 6,
+  "tool_usage": {
+    "get_all_building": 1,
+    "get_building_info": 2,
+    "send_video_file": 1,
+    "store_lead_house": 1,
+    "transfer_human": 2,
+    "set_lead_quality": 1
+  },
+  "created_at": "2026-07-01T21:16:38.390491+00:00",
+  "updated_at": "2026-07-01T21:20:52.028623+00:00",
+  "closed_at": "2026-07-01T21:20:49.483139+00:00",
+  "general_comment": "Teste bom e mais consistente que a rodada anterior do lead quente. O agente respondeu melhor ao imovel nomeado, usou get_building_info de forma correta para avaliar aderencia ao perfil familiar, enviou o video solicitado, registrou o interesse com store_lead_house e concluiu com lead_quality high, final_outcome handoff e transferencia humana efetiva. O fluxo comercial ficou mais coerente e aderente ao perfil de alta intencao. Ainda restam ajustes: houve chamada redundante de get_all_building logo na primeira mensagem mesmo com o imovel ja nomeado, o transfer_human foi executado duas vezes e a linguagem inicial ainda reforcou um pouco demais o cadastro com termos como otima escolha e elementos de visita nao estritamente confirmados. No geral, foi um teste satisfatorio, com melhora clara no tool calling e no encaixe do funil comercial, mas ainda com espaco para reduzir redundancia e embellishment.",
+  "transcript": [
+    {
+      "message_id": "259ab4cd-d9ef-4708-a0d9-49b103542362",
+      "external_message_id": 140804,
+      "sender_type": "user",
+      "interaction_type": "chat",
+      "content": "oi",
+      "created_at": "2026-07-01T21:16:38.392116+00:00",
+      "sent_at": "2026-07-01T21:16:38.392059+00:00"
+    },
+    {
+      "message_id": "e0b0cfed-8584-4fa9-8c01-97e1c87c04f9",
+      "external_message_id": null,
+      "sender_type": "assistant",
+      "interaction_type": "chat",
+      "content": "Olá! Como posso ajudar você hoje na busca por imóveis?",
+      "created_at": "2026-07-01T21:16:42.453520+00:00",
+      "sent_at": "2026-07-01T21:16:42.453458+00:00"
+    },
+    {
+      "message_id": "bdb3e544-588d-4b2b-a48f-66f778d5b11d",
+      "external_message_id": 1073401,
+      "sender_type": "user",
+      "interaction_type": "chat",
+      "content": "Oi, quero decidir isso rapido. A Casa Mirante das Palmeiras faz sentido para uma familia grande que quer visitar logo?",
+      "created_at": "2026-07-01T21:19:34.682914+00:00",
+      "sent_at": "2026-07-01T21:19:34.682718+00:00"
+    },
+    {
+      "message_id": "0d54b3aa-bde9-4315-b557-3fe5de593aaa",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "tool_call",
+      "content": "{\"name\": \"get_all_building\", \"arguments\": {}}",
+      "created_at": "2026-07-01T21:19:37.310411+00:00",
+      "sent_at": "2026-07-01T21:19:37.310344+00:00"
+    },
+    {
+      "message_id": "28caf480-175b-4ff4-8cef-21321cb3e3ff",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "tool_response",
+      "content": "{\"success\": true, \"tool_output\": {\"building_list\": [{\"building_id\": \"63687211-4308-461f-8a46-5ac69612b9d2\", \"building_name\": \"Brisa do Mar Residence\", \"source_url\": \"https://example.com/brisa-do-mar-residence\"}, {\"building_id\": \"9da89b19-928d-4685-b026-6858c76b194f\", \"building_name\": \"Casa Mirante das Palmeiras\", \"source_url\": \"https://example.com/casa-mirante-das-palmeiras\"}, {\"building_id\": \"b9fb3022-2f05-4832-b3d4-c8aa38dd3565\", \"building_name\": \"Residencial Aurora\", \"source_url\": \"https://example.com/residencial-aurora\"}], \"building_map\": {\"brisa do mar residence\": \"63687211-4308-461f-8a46-5ac69612b9d2\", \"casa mirante das palmeiras\": \"9da89b19-928d-4685-b026-6858c76b194f\", \"residencial aurora\": \"b9fb3022-2f05-4832-b3d4-c8aa38dd3565\"}}, \"summary\": \"Lista de empreendimentos carregada.\"}",
+      "created_at": "2026-07-01T21:19:37.324519+00:00",
+      "sent_at": "2026-07-01T21:19:37.324460+00:00"
+    },
+    {
+      "message_id": "952949e6-4fd3-450a-b71a-0656cad19536",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "tool_call",
+      "content": "{\"name\": \"get_building_info\", \"arguments\": {\"building_id\": \"9da89b19-928d-4685-b026-6858c76b194f\"}}",
+      "created_at": "2026-07-01T21:19:39.212782+00:00",
+      "sent_at": "2026-07-01T21:19:39.212533+00:00"
+    },
+    {
+      "message_id": "6cd0e312-54f3-40bd-bbe5-31874caa00c6",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "tool_response",
+      "content": "{\"success\": true, \"tool_output\": {\"type\": \"get_building_info\", \"resolved_from\": \"uuid\", \"building_id\": \"9da89b19-928d-4685-b026-6858c76b194f\", \"building_info\": {\"name\": \"Casa Mirante das Palmeiras\", \"information\": \"Casa ampla voltada para familias que valorizam espaco, lazer privativo e conforto para receber convidados. O imovel conta com 4 suites, sala em dois ambientes, cozinha generosa, varanda gourmet, piscina, quintal e garagem para varios carros, com area construida aproximada de 320 metros quadrados. O perfil e de moradia definitiva para quem busca mais area interna e externa, com destaque para convivio social e rotina familiar. A foto principal destaca a piscina e o video ajuda o cliente a entender a escala da casa e a distribuicao dos ambientes.\", \"source_url\": \"https://example.com/casa-mirante-das-palmeiras\", \"extraction_version\": \"seed-v2\"}, \"building_photos_total\": 1, \"building_videos_total\": 1, \"building_documents_total\": 0, \"media_inventory\": {\"photos\": [\"imagem_casa_piscina.jpg\"], \"videos\": [\"video_imovel.mp4\"], \"documents\": []}}, \"summary\": \"Informacoes do empreendimento carregadas.\"}",
+      "created_at": "2026-07-01T21:19:39.235905+00:00",
+      "sent_at": "2026-07-01T21:19:39.235758+00:00"
+    },
+    {
+      "message_id": "019dcb19-3620-4a15-8344-46e11d30ddd8",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "chat",
+      "content": "{\"raw_preview\": \"A **Casa Mirante das Palmeiras** parece ser uma ótima escolha para uma família grande. Ela oferece muito espaço com 4 suítes, ampla área de lazer e uma estrutura que favorece o convívio social. Além d\"}",
+      "created_at": "2026-07-01T21:19:41.373158+00:00",
+      "sent_at": "2026-07-01T21:19:41.373078+00:00"
+    },
+    {
+      "message_id": "fe0a5792-e9a8-40c5-af60-58e7f2101401",
+      "external_message_id": null,
+      "sender_type": "assistant",
+      "interaction_type": "chat",
+      "content": "A Casa Mirante das Palmeiras parece ser uma ótima escolha para uma família grande. Ela oferece muito espaço com 4 suítes, ampla área de lazer e uma estrutura que favorece o convívio social. Além disso, se você está pensando em visitar logo, ela oferece vários ambientes para explorar, incluindo uma piscina e uma varanda gourmet. Posso ajudar com mais alguma informação ou agendar uma visita para você?",
+      "created_at": "2026-07-01T21:19:41.374825+00:00",
+      "sent_at": "2026-07-01T21:19:41.374751+00:00"
+    },
+    {
+      "message_id": "4184321d-7aa6-432e-83fe-727ab95354fe",
+      "external_message_id": 1073402,
+      "sender_type": "user",
+      "interaction_type": "chat",
+      "content": "Se fizer, me manda o video dela agora para eu validar com minha esposa.",
+      "created_at": "2026-07-01T21:19:52.664225+00:00",
+      "sent_at": "2026-07-01T21:19:52.664139+00:00"
+    },
+    {
+      "message_id": "a92b3f46-493e-47d8-93f8-75f28779c834",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "tool_call",
+      "content": "{\"name\": \"get_building_info\", \"arguments\": {\"building_id\": \"Casa Mirante das Palmeiras\"}}",
+      "created_at": "2026-07-01T21:19:54.927332+00:00",
+      "sent_at": "2026-07-01T21:19:54.927076+00:00"
+    },
+    {
+      "message_id": "65d677e3-3ea5-483f-a86f-b903620dbab1",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "tool_response",
+      "content": "{\"success\": true, \"tool_output\": {\"type\": \"get_building_info\", \"resolved_from\": \"name\", \"building_id\": \"9da89b19-928d-4685-b026-6858c76b194f\", \"building_info\": {\"name\": \"Casa Mirante das Palmeiras\", \"information\": \"Casa ampla voltada para familias que valorizam espaco, lazer privativo e conforto para receber convidados. O imovel conta com 4 suites, sala em dois ambientes, cozinha generosa, varanda gourmet, piscina, quintal e garagem para varios carros, com area construida aproximada de 320 metros quadrados. O perfil e de moradia definitiva para quem busca mais area interna e externa, com destaque para convivio social e rotina familiar. A foto principal destaca a piscina e o video ajuda o cliente a entender a escala da casa e a distribuicao dos ambientes.\", \"source_url\": \"https://example.com/casa-mirante-das-palmeiras\", \"extraction_version\": \"seed-v2\"}, \"building_photos_total\": 1, \"building_videos_total\": 1, \"building_documents_total\": 0, \"media_inventory\": {\"photos\": [\"imagem_casa_piscina.jpg\"], \"videos\": [\"video_imovel.mp4\"], \"documents\": []}}, \"summary\": \"Informacoes do empreendimento carregadas.\"}",
+      "created_at": "2026-07-01T21:19:54.943895+00:00",
+      "sent_at": "2026-07-01T21:19:54.943798+00:00"
+    },
+    {
+      "message_id": "5ac2beb3-9e91-454a-a906-1e2df4b5538f",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "tool_call",
+      "content": "{\"name\": \"send_video_file\", \"arguments\": {\"building_id\": \"9da89b19-928d-4685-b026-6858c76b194f\", \"video_file_name\": \"video_imovel.mp4\"}}",
+      "created_at": "2026-07-01T21:19:56.533547+00:00",
+      "sent_at": "2026-07-01T21:19:56.533370+00:00"
+    },
+    {
+      "message_id": "6f205925-dcb3-4379-bb81-d222bf0cef51",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "tool_response",
+      "content": "{\"success\": true, \"tool_output\": {\"type\": \"send_video_file\", \"building_id\": \"9da89b19-928d-4685-b026-6858c76b194f\", \"resolved_from\": \"uuid\", \"video_file_name\": \"video_imovel.mp4\", \"video_url\": \"https://pub-78d5c1f023a34caab9a8c5564c4931e8.r2.dev/video_imovel.mp4\"}, \"summary\": \"Video selecionado para o empreendimento.\", \"media_events\": [{\"event\": \"media_sent\", \"url\": \"https://pub-78d5c1f023a34caab9a8c5564c4931e8.r2.dev/video_imovel.mp4\", \"success\": true}]}",
+      "created_at": "2026-07-01T21:19:58.994938+00:00",
+      "sent_at": "2026-07-01T21:19:58.994881+00:00"
+    },
+    {
+      "message_id": "cfb1f0ff-6391-4c87-a6f1-58a939ce1a7c",
+      "external_message_id": null,
+      "sender_type": "assistant",
+      "interaction_type": "chat",
+      "content": "Enviei o vídeo da Casa Mirante das Palmeiras para você. Espero que ajude na decisão com sua esposa! Caso tenham mais alguma dúvida ou queiram agendar uma visita, estou aqui para ajudar.",
+      "created_at": "2026-07-01T21:20:01.547269+00:00",
+      "sent_at": "2026-07-01T21:20:01.547206+00:00"
+    },
+    {
+      "message_id": "651ef428-1787-421e-a936-6dd1446d6927",
+      "external_message_id": 1073403,
+      "sender_type": "user",
+      "interaction_type": "chat",
+      "content": "Se estiver alinhado, quero falar com corretor hoje mesmo sobre proposta e visita.",
+      "created_at": "2026-07-01T21:20:10.665761+00:00",
+      "sent_at": "2026-07-01T21:20:10.665691+00:00"
+    },
+    {
+      "message_id": "1bf51939-1a9c-45bc-aeaf-ef52587ecf17",
+      "external_message_id": null,
+      "sender_type": "assistant",
+      "interaction_type": "chat",
+      "content": "Claro, posso ajudar você com isso. Para seguir com o agendamento do corretor e avançar na proposta e visita, preciso que você me forneça seu email. Assim, poderei transferir para um agente que irá atender suas necessidades.",
+      "created_at": "2026-07-01T21:20:13.314804+00:00",
+      "sent_at": "2026-07-01T21:20:13.314714+00:00"
+    },
+    {
+      "message_id": "f2d72825-29fd-4b1b-b8ce-4c5633791997",
+      "external_message_id": 1073404,
+      "sender_type": "user",
+      "interaction_type": "chat",
+      "content": "Meu email e leadquente34@example.com",
+      "created_at": "2026-07-01T21:20:28.636829+00:00",
+      "sent_at": "2026-07-01T21:20:28.636764+00:00"
+    },
+    {
+      "message_id": "805c253d-a992-4cd4-915d-c0d4cb5c17bb",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "tool_call",
+      "content": "{\"name\": \"store_lead_house\", \"arguments\": {\"building_id\": \"Casa Mirante das Palmeiras\"}}",
+      "created_at": "2026-07-01T21:20:32.101431+00:00",
+      "sent_at": "2026-07-01T21:20:32.101269+00:00"
+    },
+    {
+      "message_id": "83fad299-f046-4084-b22d-357586cfd9fd",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "tool_response",
+      "content": "{\"success\": true, \"tool_output\": {\"type\": \"store_lead_house\", \"building_id\": \"9da89b19-928d-4685-b026-6858c76b194f\", \"resolved_from\": \"name\", \"building_name\": \"Casa Mirante das Palmeiras\", \"status\": \"lead_interest_registered\"}, \"summary\": \"Interesse no empreendimento registrado.\", \"integration_payload\": {\"lead_interest\": {\"building_id\": \"9da89b19-928d-4685-b026-6858c76b194f\", \"building_name\": \"Casa Mirante das Palmeiras\", \"source_url\": \"https://example.com/casa-mirante-das-palmeiras\"}}}",
+      "created_at": "2026-07-01T21:20:32.119366+00:00",
+      "sent_at": "2026-07-01T21:20:32.119223+00:00"
+    },
+    {
+      "message_id": "5a004bc5-a6a9-4ee9-8194-a9988ab99978",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "tool_call",
+      "content": "{\"name\": \"transfer_human\", \"arguments\": {\"summary\": \"Cliente interessado em agendar uma visita e prosseguir com proposta para a Casa Mirante das Palmeiras.\", \"email\": \"leadquente34@example.com\", \"lead_quality\": \"high\", \"qualification_reason\": \"Cliente interessado em proposta e visita imediata.\"}}",
+      "created_at": "2026-07-01T21:20:32.121774+00:00",
+      "sent_at": "2026-07-01T21:20:32.121658+00:00"
+    },
+    {
+      "message_id": "b2c95088-7ea7-4f17-91e0-98c8cdba8120",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "tool_response",
+      "content": "{\"success\": true, \"tool_output\": {\"type\": \"transfer_human\", \"message\": \"Transferindo para atendente humano...\", \"summary\": \"Cliente interessado em agendar uma visita e prosseguir com proposta para a Casa Mirante das Palmeiras.\", \"email\": \"leadquente34@example.com\", \"lead_quality\": \"high\", \"qualification_reason\": \"Cliente interessado em proposta e visita imediata.\"}, \"summary\": \"\"}",
+      "created_at": "2026-07-01T21:20:32.653998+00:00",
+      "sent_at": "2026-07-01T21:20:32.653937+00:00"
+    },
+    {
+      "message_id": "e1adaf6c-6f8b-4fed-abee-f5af84a27adc",
+      "external_message_id": null,
+      "sender_type": "assistant",
+      "interaction_type": "chat",
+      "content": "O e-mail foi registrado, e já estou transferindo você para um corretor que poderá ajudar com a proposta e o agendamento da visita. Obrigado por entrar em contato!",
+      "created_at": "2026-07-01T21:20:34.088008+00:00",
+      "sent_at": "2026-07-01T21:20:34.087938+00:00"
+    },
+    {
+      "message_id": "ae3f3c5c-5e0a-489b-ba64-d42e2904db48",
+      "external_message_id": 1073405,
+      "sender_type": "user",
+      "interaction_type": "chat",
+      "content": "Pode deixar um resumo bem claro de que eu quero visita o quanto antes?",
+      "created_at": "2026-07-01T21:20:46.661929+00:00",
+      "sent_at": "2026-07-01T21:20:46.661849+00:00"
+    },
+    {
+      "message_id": "b3de6583-e47e-4bec-a535-908a8e2fa3e8",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "tool_call",
+      "content": "{\"name\": \"set_lead_quality\", \"arguments\": {\"lead_quality\": \"high\", \"qualification_reason\": \"Cliente solicitou visita e proposta para a Casa Mirante das Palmeiras.\"}}",
+      "created_at": "2026-07-01T21:20:49.472739+00:00",
+      "sent_at": "2026-07-01T21:20:49.472629+00:00"
+    },
+    {
+      "message_id": "d2d62b86-ed37-4178-af87-4ad65ffb7668",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "tool_response",
+      "content": "{\"success\": true, \"tool_output\": {\"type\": \"set_lead_quality\", \"lead_quality\": \"high\", \"qualification_reason\": \"Cliente solicitou visita e proposta para a Casa Mirante das Palmeiras.\", \"status\": \"lead_quality_registered\"}, \"summary\": \"Qualificacao do lead registrada.\"}",
+      "created_at": "2026-07-01T21:20:49.479893+00:00",
+      "sent_at": "2026-07-01T21:20:49.479834+00:00"
+    },
+    {
+      "message_id": "e3e610f4-a560-4221-a34e-c7589ad09282",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "tool_call",
+      "content": "{\"name\": \"transfer_human\", \"arguments\": {\"summary\": \"Cliente interessado na Casa Mirante das Palmeiras e deseja agendar visita e discutir proposta o quanto antes.\", \"email\": \"leadquente34@example.com\", \"lead_quality\": \"high\", \"qualification_reason\": \"Cliente solicitou proposta e visita imediata.\"}}",
+      "created_at": "2026-07-01T21:20:49.480842+00:00",
+      "sent_at": "2026-07-01T21:20:49.480782+00:00"
+    },
+    {
+      "message_id": "a8f84175-6765-4732-919c-cb17debda20d",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "tool_response",
+      "content": "{\"success\": true, \"tool_output\": {\"type\": \"transfer_human\", \"message\": \"Transferindo para atendente humano...\", \"summary\": \"Cliente interessado na Casa Mirante das Palmeiras e deseja agendar visita e discutir proposta o quanto antes.\", \"email\": \"leadquente34@example.com\", \"lead_quality\": \"high\", \"qualification_reason\": \"Cliente solicitou proposta e visita imediata.\"}, \"summary\": \"\"}",
+      "created_at": "2026-07-01T21:20:49.959034+00:00",
+      "sent_at": "2026-07-01T21:20:49.958981+00:00"
+    },
+    {
+      "message_id": "f66066ef-d917-445c-b1d6-74817f0c9ae6",
+      "external_message_id": null,
+      "sender_type": "assistant",
+      "interaction_type": "chat",
+      "content": "Transferi sua solicitação para um corretor que entrará em contato em breve para discutir a proposta e agendar a visita o mais rápido possível. Obrigado por escolher nossos serviços!",
+      "created_at": "2026-07-01T21:20:51.364656+00:00",
+      "sent_at": "2026-07-01T21:20:51.364374+00:00"
+    }
+  ]
+}

@@ -1,0 +1,308 @@
+{
+  "conversation_id": "e1920495-0809-4078-91c8-e44da8226b4f",
+  "lead_quality": null,
+  "qualification_reason": null,
+  "final_outcome": null,
+  "used_human_transfer": false,
+  "response_time_min_ms": 8111,
+  "response_time_max_ms": 14933,
+  "response_time_count": 7,
+  "tool_usage": {
+    "search_building_information": 3,
+    "get_all_building": 1,
+    "get_building_info": 3
+  },
+  "created_at": "2026-07-01T18:44:25.135982+00:00",
+  "updated_at": "2026-07-01T18:47:19.917394+00:00",
+  "closed_at": null,
+  "transcript": [
+    {
+      "message_id": "7ae00fc1-7b29-4b0b-aeb6-012e4c98a096",
+      "external_message_id": 140408,
+      "sender_type": "user",
+      "interaction_type": "chat",
+      "content": "oi",
+      "created_at": "2026-07-01T18:44:25.138413+00:00",
+      "sent_at": "2026-07-01T18:44:25.138297+00:00"
+    },
+    {
+      "message_id": "f7839a6f-25cb-4983-824a-d02d3c72c063",
+      "external_message_id": null,
+      "sender_type": "assistant",
+      "interaction_type": "chat",
+      "content": "Olá! Em que posso ajudar você hoje na busca pelo imóvel ideal?",
+      "created_at": "2026-07-01T18:44:27.525184+00:00",
+      "sent_at": "2026-07-01T18:44:27.525127+00:00"
+    },
+    {
+      "message_id": "38ad34a8-f782-420d-a069-eb9601b65426",
+      "external_message_id": 1072701,
+      "sender_type": "user",
+      "interaction_type": "chat",
+      "content": "Oi, ja aviso que nao quero comprar agora. Estou so pesquisando e entendendo opcoes.",
+      "created_at": "2026-07-01T18:45:45.356067+00:00",
+      "sent_at": "2026-07-01T18:45:45.355814+00:00"
+    },
+    {
+      "message_id": "6a9c1b95-10ed-4076-bae8-bc2a79924322",
+      "external_message_id": null,
+      "sender_type": "assistant",
+      "interaction_type": "chat",
+      "content": "Sem problemas! Posso te mostrar algumas opções de imóveis disponíveis para você conhecer melhor. Quer que eu liste alguns empreendimentos para começarmos?",
+      "created_at": "2026-07-01T18:45:48.983034+00:00",
+      "sent_at": "2026-07-01T18:45:48.982926+00:00"
+    },
+    {
+      "message_id": "6edc9159-10a3-4896-965e-1bfe1805704f",
+      "external_message_id": 1072702,
+      "sender_type": "user",
+      "interaction_type": "chat",
+      "content": "Em poucas palavras, qual a diferenca entre apartamento compacto, casa maior e imovel de praia?",
+      "created_at": "2026-07-01T18:46:03.327860+00:00",
+      "sent_at": "2026-07-01T18:46:03.327642+00:00"
+    },
+    {
+      "message_id": "db3f6875-f883-4031-a589-38462df6836b",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "tool_call",
+      "content": "{\"name\": \"search_building_information\", \"arguments\": {\"query\": \"apartamento compacto\"}}",
+      "created_at": "2026-07-01T18:46:07.148750+00:00",
+      "sent_at": "2026-07-01T18:46:07.148499+00:00"
+    },
+    {
+      "message_id": "6175cfdd-ae9b-479c-bfb1-af44a2fe1fe0",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "tool_response",
+      "content": "{\"success\": true, \"tool_output\": {\"type\": \"search_building_information\", \"query\": \"apartamento compacto\", \"building_id\": null, \"matches\": [], \"context\": \"\"}, \"summary\": \"Trechos relevantes do catalogo recuperados.\"}",
+      "created_at": "2026-07-01T18:46:07.495940+00:00",
+      "sent_at": "2026-07-01T18:46:07.495882+00:00"
+    },
+    {
+      "message_id": "52f71041-36f0-4b94-b6b8-2368f3e3bb62",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "tool_call",
+      "content": "{\"name\": \"search_building_information\", \"arguments\": {\"query\": \"casa maior\"}}",
+      "created_at": "2026-07-01T18:46:07.497043+00:00",
+      "sent_at": "2026-07-01T18:46:07.496998+00:00"
+    },
+    {
+      "message_id": "6d0a4c05-6b12-4834-87ca-a81840a0555d",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "tool_response",
+      "content": "{\"success\": true, \"tool_output\": {\"type\": \"search_building_information\", \"query\": \"casa maior\", \"building_id\": null, \"matches\": [], \"context\": \"\"}, \"summary\": \"Trechos relevantes do catalogo recuperados.\"}",
+      "created_at": "2026-07-01T18:46:08.525158+00:00",
+      "sent_at": "2026-07-01T18:46:08.525094+00:00"
+    },
+    {
+      "message_id": "4be4206c-6d88-420d-b37f-23a7a4d367e7",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "tool_call",
+      "content": "{\"name\": \"search_building_information\", \"arguments\": {\"query\": \"imovel de praia\"}}",
+      "created_at": "2026-07-01T18:46:08.526185+00:00",
+      "sent_at": "2026-07-01T18:46:08.526135+00:00"
+    },
+    {
+      "message_id": "3624941a-0f25-47a8-bf5f-51b26fe6c2b9",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "tool_response",
+      "content": "{\"success\": true, \"tool_output\": {\"type\": \"search_building_information\", \"query\": \"imovel de praia\", \"building_id\": null, \"matches\": [], \"context\": \"\"}, \"summary\": \"Trechos relevantes do catalogo recuperados.\"}",
+      "created_at": "2026-07-01T18:46:08.765107+00:00",
+      "sent_at": "2026-07-01T18:46:08.765046+00:00"
+    },
+    {
+      "message_id": "d7483487-0984-4ce7-b24f-b44aedb91832",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "chat",
+      "content": "{\"raw_preview\": \"Infelizmente, o catálogo não trouxe detalhes específicos sobre as diferenças. Mas, em linhas gerais:\\n\\n- **Apartamento compacto**: Geralmente voltado para quem busca praticidade. Tendem a ter menos esp\"}",
+      "created_at": "2026-07-01T18:46:12.658339+00:00",
+      "sent_at": "2026-07-01T18:46:12.658213+00:00"
+    },
+    {
+      "message_id": "a7dd122f-20b8-400b-9bd7-cdc5e3bcf3d9",
+      "external_message_id": null,
+      "sender_type": "assistant",
+      "interaction_type": "chat",
+      "content": "Infelizmente, o catálogo não trouxe detalhes específicos sobre as diferenças. Mas, em linhas gerais: - Apartamento compacto: Geralmente voltado para quem busca praticidade. Tendem a ter menos espaço, mas são funcionais e muitas vezes em áreas centrais. - Casa maior: Ideal para famílias ou quem busca mais espaço e privacidade. Pode oferecer áreas externas como jardins e terraços. - Imóvel de praia: Focado no lazer e descanso, localizado em regiões próximas ao mar. Pode ser usado para férias ou como segunda residência. Se você quiser explorar alguma dessas opções mais a fundo, posso listar al...",
+      "created_at": "2026-07-01T18:46:12.661397+00:00",
+      "sent_at": "2026-07-01T18:46:12.661282+00:00"
+    },
+    {
+      "message_id": "179f77d6-1085-47ad-98f3-c4adb83e6391",
+      "external_message_id": 1072703,
+      "sender_type": "user",
+      "interaction_type": "chat",
+      "content": "Pode me mostrar quais empreendimentos voces tem, mas sem tentar me vender visita ou corretor agora.",
+      "created_at": "2026-07-01T18:46:21.357406+00:00",
+      "sent_at": "2026-07-01T18:46:21.357109+00:00"
+    },
+    {
+      "message_id": "a8c35c2b-6274-402e-998b-b18fc6051d6f",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "tool_call",
+      "content": "{\"name\": \"get_all_building\", \"arguments\": {}}",
+      "created_at": "2026-07-01T18:46:23.490369+00:00",
+      "sent_at": "2026-07-01T18:46:23.490123+00:00"
+    },
+    {
+      "message_id": "a204cf07-250e-4d6c-ade1-0928b8eac981",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "tool_response",
+      "content": "{\"success\": true, \"tool_output\": {\"building_list\": [{\"building_id\": \"63687211-4308-461f-8a46-5ac69612b9d2\", \"building_name\": \"Brisa do Mar Residence\", \"source_url\": \"https://example.com/brisa-do-mar-residence\"}, {\"building_id\": \"9da89b19-928d-4685-b026-6858c76b194f\", \"building_name\": \"Casa Mirante das Palmeiras\", \"source_url\": \"https://example.com/casa-mirante-das-palmeiras\"}, {\"building_id\": \"b9fb3022-2f05-4832-b3d4-c8aa38dd3565\", \"building_name\": \"Residencial Aurora\", \"source_url\": \"https://example.com/residencial-aurora\"}], \"building_map\": {\"brisa do mar residence\": \"63687211-4308-461f-8a46-5ac69612b9d2\", \"casa mirante das palmeiras\": \"9da89b19-928d-4685-b026-6858c76b194f\", \"residencial aurora\": \"b9fb3022-2f05-4832-b3d4-c8aa38dd3565\"}}, \"summary\": \"Lista de empreendimentos carregada.\"}",
+      "created_at": "2026-07-01T18:46:23.510045+00:00",
+      "sent_at": "2026-07-01T18:46:23.509987+00:00"
+    },
+    {
+      "message_id": "ae2f672c-1f3c-4f45-bd31-852c2a28a9c8",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "chat",
+      "content": "{\"raw_preview\": \"Aqui estão alguns empreendimentos disponíveis:\\n\\n- **Brisa do Mar Residence**\\n- **Casa Mirante das Palmeiras**\\n- **Residencial Aurora**\\n\\nSe algum deles te interessar, posso contar mais detalhes!\"}",
+      "created_at": "2026-07-01T18:46:25.108135+00:00",
+      "sent_at": "2026-07-01T18:46:25.107864+00:00"
+    },
+    {
+      "message_id": "e5c2d062-9863-49f0-921d-eff4a71a366d",
+      "external_message_id": null,
+      "sender_type": "assistant",
+      "interaction_type": "chat",
+      "content": "Aqui estão alguns empreendimentos disponíveis: - Brisa do Mar Residence - Casa Mirante das Palmeiras - Residencial Aurora Se algum deles te interessar, posso contar mais detalhes!",
+      "created_at": "2026-07-01T18:46:25.113075+00:00",
+      "sent_at": "2026-07-01T18:46:25.112900+00:00"
+    },
+    {
+      "message_id": "ea75fdc5-6e83-48d3-ab78-065365c5c2e8",
+      "external_message_id": 1072704,
+      "sender_type": "user",
+      "interaction_type": "chat",
+      "content": "Se eu fosse apenas acompanhar o mercado, que tipo de criterio vale observar nesses imoveis?",
+      "created_at": "2026-07-01T18:46:39.333242+00:00",
+      "sent_at": "2026-07-01T18:46:39.332982+00:00"
+    },
+    {
+      "message_id": "e1807399-3c4f-4658-b948-b91fc166e0bf",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "chat",
+      "content": "{\"raw_preview\": \"Você pode observar critérios como:\\n\\n1. **Localização**: Proximidade de serviços, transporte e lazer.\\n2. **Tamanho e Layout**: Adequado às suas necessidades de espaço e uso.\\n3. **Valor de Mercado**: Co\"}",
+      "created_at": "2026-07-01T18:46:42.542076+00:00",
+      "sent_at": "2026-07-01T18:46:42.541920+00:00"
+    },
+    {
+      "message_id": "31e9f370-4145-4698-ae55-90702eb9ebb4",
+      "external_message_id": null,
+      "sender_type": "assistant",
+      "interaction_type": "chat",
+      "content": "Você pode observar critérios como: 1. Localização: Proximidade de serviços, transporte e lazer. 2. Tamanho e Layout: Adequado às suas necessidades de espaço e uso. 3. Valor de Mercado: Comparar preços de imóveis semelhantes na região. 4. Potencial de Valorização: Tendências de desenvolvimento e melhorias na área. 5. Infraestrutura: Qualidade de construção e facilidades oferecidas. Se tiver interesse em algum critério específico, posso ajudar a buscar informações.",
+      "created_at": "2026-07-01T18:46:42.545274+00:00",
+      "sent_at": "2026-07-01T18:46:42.545173+00:00"
+    },
+    {
+      "message_id": "a8768b98-15bc-4009-83b9-6666b5458d22",
+      "external_message_id": 1072705,
+      "sender_type": "user",
+      "interaction_type": "chat",
+      "content": "Tem algum exemplo do catalogo que ajude a entender esses criterios sem compromisso?",
+      "created_at": "2026-07-01T18:46:57.320259+00:00",
+      "sent_at": "2026-07-01T18:46:57.319988+00:00"
+    },
+    {
+      "message_id": "92cecc68-7143-4e15-b299-4b2a7d85855f",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "tool_call",
+      "content": "{\"name\": \"get_building_info\", \"arguments\": {\"building_id\": \"Brisa do Mar Residence\"}}",
+      "created_at": "2026-07-01T18:47:00.070911+00:00",
+      "sent_at": "2026-07-01T18:47:00.070631+00:00"
+    },
+    {
+      "message_id": "c756d376-b6ef-4650-98c1-ac58a71656ae",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "tool_response",
+      "content": "{\"success\": true, \"tool_output\": {\"type\": \"get_building_info\", \"resolved_from\": \"name\", \"building_id\": \"63687211-4308-461f-8a46-5ac69612b9d2\", \"building_info\": {\"name\": \"Brisa do Mar Residence\", \"information\": \"Imovel com proposta de segunda moradia ou vida leve perto da praia, pensado para quem prioriza descanso, vista aberta e atmosfera de litoral. O projeto traz 3 quartos, varanda ampla, integracao entre sala e area externa e aproximadamente 110 metros quadrados, com foco em ventilacao, iluminacao natural e experiencia de uso nos fins de semana ou temporadas longas. O perfil combina bem com clientes que perguntam sobre proximidade da orla, lazer, praticidade de manutencao e uso para familia ou temporadas. A imagem de jardim reforca o clima do imovel e o documento em PDF concentra as especificacoes principais para consulta mais detalhada.\", \"source_url\": \"https://example.com/brisa-do-mar-residence\", \"extraction_version\": \"seed-v2\"}, \"building_photos_total\": 1, \"building_videos_total\": 0, \"building_documents_total\": 1, \"media_inventory\": {\"photos\": [\"imagem_jardim.jpg\"], \"videos\": [], \"documents\": [\"EspecificacoesImovel.pdf\"]}}, \"summary\": \"Informacoes do empreendimento carregadas.\"}",
+      "created_at": "2026-07-01T18:47:00.093808+00:00",
+      "sent_at": "2026-07-01T18:47:00.093684+00:00"
+    },
+    {
+      "message_id": "198d156a-b3e1-4bb3-ad59-22226dc7cc2a",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "tool_call",
+      "content": "{\"name\": \"get_building_info\", \"arguments\": {\"building_id\": \"Casa Mirante das Palmeiras\"}}",
+      "created_at": "2026-07-01T18:47:00.095962+00:00",
+      "sent_at": "2026-07-01T18:47:00.095893+00:00"
+    },
+    {
+      "message_id": "88bdaaa1-cebc-46b6-8bab-7ca56fa14fd5",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "tool_response",
+      "content": "{\"success\": true, \"tool_output\": {\"type\": \"get_building_info\", \"resolved_from\": \"name\", \"building_id\": \"9da89b19-928d-4685-b026-6858c76b194f\", \"building_info\": {\"name\": \"Casa Mirante das Palmeiras\", \"information\": \"Casa ampla voltada para familias que valorizam espaco, lazer privativo e conforto para receber convidados. O imovel conta com 4 suites, sala em dois ambientes, cozinha generosa, varanda gourmet, piscina, quintal e garagem para varios carros, com area construida aproximada de 320 metros quadrados. O perfil e de moradia definitiva para quem busca mais area interna e externa, com destaque para convivio social e rotina familiar. A foto principal destaca a piscina e o video ajuda o cliente a entender a escala da casa e a distribuicao dos ambientes.\", \"source_url\": \"https://example.com/casa-mirante-das-palmeiras\", \"extraction_version\": \"seed-v2\"}, \"building_photos_total\": 1, \"building_videos_total\": 1, \"building_documents_total\": 0, \"media_inventory\": {\"photos\": [\"imagem_casa_piscina.jpg\"], \"videos\": [\"video_imovel.mp4\"], \"documents\": []}}, \"summary\": \"Informacoes do empreendimento carregadas.\"}",
+      "created_at": "2026-07-01T18:47:00.102125+00:00",
+      "sent_at": "2026-07-01T18:47:00.102041+00:00"
+    },
+    {
+      "message_id": "811fd130-093f-4c8f-8781-1dee04e1b41a",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "tool_call",
+      "content": "{\"name\": \"get_building_info\", \"arguments\": {\"building_id\": \"Residencial Aurora\"}}",
+      "created_at": "2026-07-01T18:47:00.103200+00:00",
+      "sent_at": "2026-07-01T18:47:00.103154+00:00"
+    },
+    {
+      "message_id": "23f36cb4-af1b-4e2a-a65e-5e9d905eaf20",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "tool_response",
+      "content": "{\"success\": true, \"tool_output\": {\"type\": \"get_building_info\", \"resolved_from\": \"name\", \"building_id\": \"b9fb3022-2f05-4832-b3d4-c8aa38dd3565\", \"building_info\": {\"name\": \"Residencial Aurora\", \"information\": \"Apartamento compacto em regiao central, ideal para primeiro imovel, casal ou investidor que busca praticidade no dia a dia. O empreendimento oferece unidades de 1 e 2 quartos com plantas entre 48 e 67 metros quadrados, ambientes bem resolvidos, cozinha integrada e vaga de garagem coberta em algumas unidades. A localizacao facilita acesso a comercio, servicos, transporte e vida urbana, enquanto o condominio entrega uma proposta enxuta e funcional para quem quer morar perto de tudo. As imagens cadastradas mostram ambientes como cozinha, banheiro e garagem, o que ajuda o atendimento a detalhar o estilo do imovel de forma objetiva.\", \"source_url\": \"https://example.com/residencial-aurora\", \"extraction_version\": \"seed-v2\"}, \"building_photos_total\": 3, \"building_videos_total\": 0, \"building_documents_total\": 0, \"media_inventory\": {\"photos\": [\"imagem_cozinha.webp\", \"imagem_banheiro.jpg\", \"imagem_garagem.jpeg\"], \"videos\": [], \"documents\": []}}, \"summary\": \"Informacoes do empreendimento carregadas.\"}",
+      "created_at": "2026-07-01T18:47:00.107677+00:00",
+      "sent_at": "2026-07-01T18:47:00.107628+00:00"
+    },
+    {
+      "message_id": "828a3a43-f504-4586-b6b5-5d777d6724b2",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "chat",
+      "content": "{\"raw_preview\": \"Aqui estão três exemplos do catálogo que podem ilustrar critérios para observar:\\n\\n1. **Brisa do Mar Residence:**\\n   - Focado em descanso e proximidade com a praia.\\n   - Oferece 3 quartos, varanda ampl\"}",
+      "created_at": "2026-07-01T18:47:04.651834+00:00",
+      "sent_at": "2026-07-01T18:47:04.651690+00:00"
+    },
+    {
+      "message_id": "8d038959-ba7e-4eef-b23f-12b29ef676bf",
+      "external_message_id": null,
+      "sender_type": "assistant",
+      "interaction_type": "chat",
+      "content": "Aqui estão três exemplos do catálogo que podem ilustrar critérios para observar: 1. Brisa do Mar Residence: - Focado em descanso e proximidade com a praia. - Oferece 3 quartos, varanda ampla, e integração com áreas externas em 110 m². - Ideal para temporadas longas, priorizando ventilação e iluminação natural. 2. Casa Mirante das Palmeiras: - Residência ampla com 320 m². - Voltada para famílias, possui 4 suítes, piscina e área de lazer privativa. - Excelente para quem busca espaço e conforto familiar. 3. Residencial Aurora: - Apartamento compacto em região central. - Unidades de 1 e 2 quart...",
+      "created_at": "2026-07-01T18:47:04.654452+00:00",
+      "sent_at": "2026-07-01T18:47:04.654362+00:00"
+    },
+    {
+      "message_id": "60244d9f-3074-424a-8156-4d0b894f42dd",
+      "external_message_id": 1072706,
+      "sender_type": "user",
+      "interaction_type": "chat",
+      "content": "Obrigado, era so para entender mesmo. Nao quero seguir com atendimento por enquanto.",
+      "created_at": "2026-07-01T18:47:15.342401+00:00",
+      "sent_at": "2026-07-01T18:47:15.342012+00:00"
+    },
+    {
+      "message_id": "b881cded-cff1-4f9f-a902-799e10615037",
+      "external_message_id": null,
+      "sender_type": "assistant",
+      "interaction_type": "chat",
+      "content": "Tudo bem! Se precisar de mais informações no futuro, estarei por aqui. Até mais!",
+      "created_at": "2026-07-01T18:47:19.337670+00:00",
+      "sent_at": "2026-07-01T18:47:19.337421+00:00"
+    }
+  ]
+}

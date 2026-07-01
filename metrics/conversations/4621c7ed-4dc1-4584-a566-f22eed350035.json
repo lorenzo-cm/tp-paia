@@ -1,0 +1,348 @@
+{
+  "conversation_id": "4621c7ed-4dc1-4584-a566-f22eed350035",
+  "lead_quality": "high",
+  "qualification_reason": "Interesse em visita e negociação para um empreendimento específico.",
+  "final_outcome": "handoff",
+  "used_human_transfer": true,
+  "response_time_min_ms": 7210,
+  "response_time_max_ms": 18094,
+  "response_time_count": 7,
+  "tool_usage": {
+    "get_all_building": 3,
+    "get_building_info": 3,
+    "send_photo_file": 1,
+    "send_video_file": 1,
+    "send_building_document": 1,
+    "transfer_human": 2
+  },
+  "created_at": "2026-07-01T19:40:13.380391+00:00",
+  "updated_at": "2026-07-01T19:42:54.310728+00:00",
+  "closed_at": "2026-07-01T19:42:51.643288+00:00",
+  "general_comment": "Conversa bem aderente ao perfil de lead com pedidos inusitados. O agente executou corretamente o envio de foto, video e documento, pediu email antes do handoff e registrou a transferencia humana com lead_quality high e final_outcome handoff, o que mostra bom encaixe do fluxo comercial. O uso das tools principais foi funcional e sem informacoes erradas sobre os imoveis. Os problemas restantes foram mais de eficiencia e consistencia: houve chamadas redundantes de get_all_building mesmo com o nome do empreendimento ja informado pelo usuario, nao houve uso de store_lead_house apesar de interesse explicito em multiplos imoveis e o transfer_human foi chamado duas vezes, quando a segunda interacao poderia apenas confirmar que o resumo ja havia sido repassado. No geral, foi um teste forte e satisfatorio para este perfil, com ajustes finos pendentes no controle de fluxo e reducao de chamadas desnecessarias.",
+  "transcript": [
+    {
+      "message_id": "0ff0ef19-18ec-441d-abfc-85f5459afa4a",
+      "external_message_id": 140528,
+      "sender_type": "user",
+      "interaction_type": "chat",
+      "content": "oi",
+      "created_at": "2026-07-01T19:40:13.383807+00:00",
+      "sent_at": "2026-07-01T19:40:13.383679+00:00"
+    },
+    {
+      "message_id": "95d9d789-80d8-4fe7-aead-6d24403476c5",
+      "external_message_id": null,
+      "sender_type": "assistant",
+      "interaction_type": "chat",
+      "content": "Olá! Como posso ajudar você hoje na busca pelo imóvel ideal?",
+      "created_at": "2026-07-01T19:40:15.001572+00:00",
+      "sent_at": "2026-07-01T19:40:15.001327+00:00"
+    },
+    {
+      "message_id": "29766f6f-4a46-4b59-99a9-299ab9dae225",
+      "external_message_id": 1073201,
+      "sender_type": "user",
+      "interaction_type": "chat",
+      "content": "Oi, voces conseguem me mandar uma foto da cozinha do Residencial Aurora?",
+      "created_at": "2026-07-01T19:41:19.246466+00:00",
+      "sent_at": "2026-07-01T19:41:19.246387+00:00"
+    },
+    {
+      "message_id": "41d314a5-e3ba-45ac-a202-4528eaafc447",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "tool_call",
+      "content": "{\"name\": \"get_all_building\", \"arguments\": {}}",
+      "created_at": "2026-07-01T19:41:21.858747+00:00",
+      "sent_at": "2026-07-01T19:41:21.858500+00:00"
+    },
+    {
+      "message_id": "1dbeaac7-27c3-4c7d-8892-5f1db08f669e",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "tool_response",
+      "content": "{\"success\": true, \"tool_output\": {\"building_list\": [{\"building_id\": \"63687211-4308-461f-8a46-5ac69612b9d2\", \"building_name\": \"Brisa do Mar Residence\", \"source_url\": \"https://example.com/brisa-do-mar-residence\"}, {\"building_id\": \"9da89b19-928d-4685-b026-6858c76b194f\", \"building_name\": \"Casa Mirante das Palmeiras\", \"source_url\": \"https://example.com/casa-mirante-das-palmeiras\"}, {\"building_id\": \"b9fb3022-2f05-4832-b3d4-c8aa38dd3565\", \"building_name\": \"Residencial Aurora\", \"source_url\": \"https://example.com/residencial-aurora\"}], \"building_map\": {\"brisa do mar residence\": \"63687211-4308-461f-8a46-5ac69612b9d2\", \"casa mirante das palmeiras\": \"9da89b19-928d-4685-b026-6858c76b194f\", \"residencial aurora\": \"b9fb3022-2f05-4832-b3d4-c8aa38dd3565\"}}, \"summary\": \"Lista de empreendimentos carregada.\"}",
+      "created_at": "2026-07-01T19:41:21.873027+00:00",
+      "sent_at": "2026-07-01T19:41:21.872971+00:00"
+    },
+    {
+      "message_id": "3b6288b1-9127-4c5d-b348-bab047ac489e",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "tool_call",
+      "content": "{\"name\": \"get_building_info\", \"arguments\": {\"building_id\": \"b9fb3022-2f05-4832-b3d4-c8aa38dd3565\"}}",
+      "created_at": "2026-07-01T19:41:23.041479+00:00",
+      "sent_at": "2026-07-01T19:41:23.041382+00:00"
+    },
+    {
+      "message_id": "d8e97cfd-86eb-4337-87d4-61c23eb9b350",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "tool_response",
+      "content": "{\"success\": true, \"tool_output\": {\"type\": \"get_building_info\", \"resolved_from\": \"uuid\", \"building_id\": \"b9fb3022-2f05-4832-b3d4-c8aa38dd3565\", \"building_info\": {\"name\": \"Residencial Aurora\", \"information\": \"Apartamento compacto em regiao central, ideal para primeiro imovel, casal ou investidor que busca praticidade no dia a dia. O empreendimento oferece unidades de 1 e 2 quartos com plantas entre 48 e 67 metros quadrados, ambientes bem resolvidos, cozinha integrada e vaga de garagem coberta em algumas unidades. A localizacao facilita acesso a comercio, servicos, transporte e vida urbana, enquanto o condominio entrega uma proposta enxuta e funcional para quem quer morar perto de tudo. As imagens cadastradas mostram ambientes como cozinha, banheiro e garagem, o que ajuda o atendimento a detalhar o estilo do imovel de forma objetiva.\", \"source_url\": \"https://example.com/residencial-aurora\", \"extraction_version\": \"seed-v2\"}, \"building_photos_total\": 3, \"building_videos_total\": 0, \"building_documents_total\": 0, \"media_inventory\": {\"photos\": [\"imagem_cozinha.webp\", \"imagem_banheiro.jpg\", \"imagem_garagem.jpeg\"], \"videos\": [], \"documents\": []}}, \"summary\": \"Informacoes do empreendimento carregadas.\"}",
+      "created_at": "2026-07-01T19:41:23.063793+00:00",
+      "sent_at": "2026-07-01T19:41:23.063624+00:00"
+    },
+    {
+      "message_id": "912c2377-d21b-4db5-a450-da22094608d7",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "tool_call",
+      "content": "{\"name\": \"send_photo_file\", \"arguments\": {\"building_id\": \"b9fb3022-2f05-4832-b3d4-c8aa38dd3565\", \"parte_do_imovel\": \"cozinha\"}}",
+      "created_at": "2026-07-01T19:41:24.222487+00:00",
+      "sent_at": "2026-07-01T19:41:24.222245+00:00"
+    },
+    {
+      "message_id": "2c3df444-3a55-451e-8f0b-e473c290728d",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "tool_response",
+      "content": "{\"success\": true, \"tool_output\": {\"type\": \"send_photo_file\", \"building_id\": \"b9fb3022-2f05-4832-b3d4-c8aa38dd3565\", \"resolved_from\": \"uuid\", \"parte_do_imovel\": \"cozinha\", \"photos_url\": [\"https://pub-78d5c1f023a34caab9a8c5564c4931e8.r2.dev/imagem_cozinha.webp\"]}, \"summary\": \"Fotos selecionadas para o empreendimento.\", \"media_events\": [{\"event\": \"media_sent\", \"url\": \"https://pub-78d5c1f023a34caab9a8c5564c4931e8.r2.dev/imagem_cozinha.webp\", \"success\": true}]}",
+      "created_at": "2026-07-01T19:41:25.486790+00:00",
+      "sent_at": "2026-07-01T19:41:25.486724+00:00"
+    },
+    {
+      "message_id": "6e681a12-9bd9-4525-9f3c-f1d6e0cd0baa",
+      "external_message_id": null,
+      "sender_type": "assistant",
+      "interaction_type": "chat",
+      "content": "Aqui está a foto da cozinha do Residencial Aurora: ![Cozinha do Residencial Aurora](https://pub-78d5c1f023a34caab9a8c5564c4931e8.r2.dev/imagem_cozinha.webp) Se precisar de mais informações, estou à disposição!",
+      "created_at": "2026-07-01T19:41:27.222696+00:00",
+      "sent_at": "2026-07-01T19:41:27.222458+00:00"
+    },
+    {
+      "message_id": "ed26f26c-552b-4b3c-96f9-6386033bc0d9",
+      "external_message_id": 1073202,
+      "sender_type": "user",
+      "interaction_type": "chat",
+      "content": "E da Casa Mirante das Palmeiras, tem video? Se tiver, pode mandar.",
+      "created_at": "2026-07-01T19:41:37.249190+00:00",
+      "sent_at": "2026-07-01T19:41:37.248925+00:00"
+    },
+    {
+      "message_id": "8479036b-83be-4fc2-9d6c-12bdaf20ca53",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "tool_call",
+      "content": "{\"name\": \"get_all_building\", \"arguments\": {}}",
+      "created_at": "2026-07-01T19:41:39.716555+00:00",
+      "sent_at": "2026-07-01T19:41:39.716438+00:00"
+    },
+    {
+      "message_id": "29f7412c-8193-4c4c-b27c-e1932585b84c",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "tool_response",
+      "content": "{\"success\": true, \"tool_output\": {\"building_list\": [{\"building_id\": \"63687211-4308-461f-8a46-5ac69612b9d2\", \"building_name\": \"Brisa do Mar Residence\", \"source_url\": \"https://example.com/brisa-do-mar-residence\"}, {\"building_id\": \"9da89b19-928d-4685-b026-6858c76b194f\", \"building_name\": \"Casa Mirante das Palmeiras\", \"source_url\": \"https://example.com/casa-mirante-das-palmeiras\"}, {\"building_id\": \"b9fb3022-2f05-4832-b3d4-c8aa38dd3565\", \"building_name\": \"Residencial Aurora\", \"source_url\": \"https://example.com/residencial-aurora\"}], \"building_map\": {\"brisa do mar residence\": \"63687211-4308-461f-8a46-5ac69612b9d2\", \"casa mirante das palmeiras\": \"9da89b19-928d-4685-b026-6858c76b194f\", \"residencial aurora\": \"b9fb3022-2f05-4832-b3d4-c8aa38dd3565\"}}, \"summary\": \"Lista de empreendimentos carregada.\"}",
+      "created_at": "2026-07-01T19:41:39.726665+00:00",
+      "sent_at": "2026-07-01T19:41:39.726605+00:00"
+    },
+    {
+      "message_id": "3e44b666-6cc1-4a28-84bf-7d4f771cff76",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "tool_call",
+      "content": "{\"name\": \"get_building_info\", \"arguments\": {\"building_id\": \"9da89b19-928d-4685-b026-6858c76b194f\"}}",
+      "created_at": "2026-07-01T19:41:41.515771+00:00",
+      "sent_at": "2026-07-01T19:41:41.515683+00:00"
+    },
+    {
+      "message_id": "656d395b-962f-45e6-9df7-9fab1a67b678",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "tool_response",
+      "content": "{\"success\": true, \"tool_output\": {\"type\": \"get_building_info\", \"resolved_from\": \"uuid\", \"building_id\": \"9da89b19-928d-4685-b026-6858c76b194f\", \"building_info\": {\"name\": \"Casa Mirante das Palmeiras\", \"information\": \"Casa ampla voltada para familias que valorizam espaco, lazer privativo e conforto para receber convidados. O imovel conta com 4 suites, sala em dois ambientes, cozinha generosa, varanda gourmet, piscina, quintal e garagem para varios carros, com area construida aproximada de 320 metros quadrados. O perfil e de moradia definitiva para quem busca mais area interna e externa, com destaque para convivio social e rotina familiar. A foto principal destaca a piscina e o video ajuda o cliente a entender a escala da casa e a distribuicao dos ambientes.\", \"source_url\": \"https://example.com/casa-mirante-das-palmeiras\", \"extraction_version\": \"seed-v2\"}, \"building_photos_total\": 1, \"building_videos_total\": 1, \"building_documents_total\": 0, \"media_inventory\": {\"photos\": [\"imagem_casa_piscina.jpg\"], \"videos\": [\"video_imovel.mp4\"], \"documents\": []}}, \"summary\": \"Informacoes do empreendimento carregadas.\"}",
+      "created_at": "2026-07-01T19:41:41.522653+00:00",
+      "sent_at": "2026-07-01T19:41:41.522575+00:00"
+    },
+    {
+      "message_id": "64dd4fcf-cf87-45e8-a8de-032678df559d",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "tool_call",
+      "content": "{\"name\": \"send_video_file\", \"arguments\": {\"building_id\": \"9da89b19-928d-4685-b026-6858c76b194f\", \"video_file_name\": \"video_imovel.mp4\"}}",
+      "created_at": "2026-07-01T19:41:43.966333+00:00",
+      "sent_at": "2026-07-01T19:41:43.966165+00:00"
+    },
+    {
+      "message_id": "9af9ad9c-f049-4d10-b780-579ddf2fa853",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "tool_response",
+      "content": "{\"success\": true, \"tool_output\": {\"type\": \"send_video_file\", \"building_id\": \"9da89b19-928d-4685-b026-6858c76b194f\", \"resolved_from\": \"uuid\", \"video_file_name\": \"video_imovel.mp4\", \"video_url\": \"https://pub-78d5c1f023a34caab9a8c5564c4931e8.r2.dev/video_imovel.mp4\"}, \"summary\": \"Video selecionado para o empreendimento.\", \"media_events\": [{\"event\": \"media_sent\", \"url\": \"https://pub-78d5c1f023a34caab9a8c5564c4931e8.r2.dev/video_imovel.mp4\", \"success\": true}]}",
+      "created_at": "2026-07-01T19:41:46.100293+00:00",
+      "sent_at": "2026-07-01T19:41:46.100206+00:00"
+    },
+    {
+      "message_id": "e032d6ed-b540-47fb-89da-9d801ce4f65f",
+      "external_message_id": null,
+      "sender_type": "assistant",
+      "interaction_type": "chat",
+      "content": "Aqui está o vídeo da Casa Mirante das Palmeiras: [Assista ao vídeo](https://pub-78d5c1f023a34caab9a8c5564c4931e8.r2.dev/video_imovel.mp4). Se precisar de mais informações ou tiver outras dúvidas, é só me avisar!",
+      "created_at": "2026-07-01T19:41:48.334827+00:00",
+      "sent_at": "2026-07-01T19:41:48.334728+00:00"
+    },
+    {
+      "message_id": "11a18bd1-2af3-4834-b2c9-1259178666a8",
+      "external_message_id": 1073203,
+      "sender_type": "user",
+      "interaction_type": "chat",
+      "content": "Do Brisa do Mar Residence eu queria o documento com as especificacoes.",
+      "created_at": "2026-07-01T19:41:55.236906+00:00",
+      "sent_at": "2026-07-01T19:41:55.236831+00:00"
+    },
+    {
+      "message_id": "56e05b9c-1e17-4af7-ac65-d1da0dd33f10",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "tool_call",
+      "content": "{\"name\": \"get_all_building\", \"arguments\": {}}",
+      "created_at": "2026-07-01T19:42:01.753542+00:00",
+      "sent_at": "2026-07-01T19:42:01.753473+00:00"
+    },
+    {
+      "message_id": "15567ea3-7aac-45d4-ac4c-523894856757",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "tool_response",
+      "content": "{\"success\": true, \"tool_output\": {\"building_list\": [{\"building_id\": \"63687211-4308-461f-8a46-5ac69612b9d2\", \"building_name\": \"Brisa do Mar Residence\", \"source_url\": \"https://example.com/brisa-do-mar-residence\"}, {\"building_id\": \"9da89b19-928d-4685-b026-6858c76b194f\", \"building_name\": \"Casa Mirante das Palmeiras\", \"source_url\": \"https://example.com/casa-mirante-das-palmeiras\"}, {\"building_id\": \"b9fb3022-2f05-4832-b3d4-c8aa38dd3565\", \"building_name\": \"Residencial Aurora\", \"source_url\": \"https://example.com/residencial-aurora\"}], \"building_map\": {\"brisa do mar residence\": \"63687211-4308-461f-8a46-5ac69612b9d2\", \"casa mirante das palmeiras\": \"9da89b19-928d-4685-b026-6858c76b194f\", \"residencial aurora\": \"b9fb3022-2f05-4832-b3d4-c8aa38dd3565\"}}, \"summary\": \"Lista de empreendimentos carregada.\"}",
+      "created_at": "2026-07-01T19:42:01.759319+00:00",
+      "sent_at": "2026-07-01T19:42:01.759256+00:00"
+    },
+    {
+      "message_id": "2ad09035-c10e-4902-95f5-498267575c4e",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "tool_call",
+      "content": "{\"name\": \"get_building_info\", \"arguments\": {\"building_id\": \"63687211-4308-461f-8a46-5ac69612b9d2\"}}",
+      "created_at": "2026-07-01T19:42:02.977998+00:00",
+      "sent_at": "2026-07-01T19:42:02.977752+00:00"
+    },
+    {
+      "message_id": "20dd8517-47fa-42c0-8936-975b6db93928",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "tool_response",
+      "content": "{\"success\": true, \"tool_output\": {\"type\": \"get_building_info\", \"resolved_from\": \"uuid\", \"building_id\": \"63687211-4308-461f-8a46-5ac69612b9d2\", \"building_info\": {\"name\": \"Brisa do Mar Residence\", \"information\": \"Imovel com proposta de segunda moradia ou vida leve perto da praia, pensado para quem prioriza descanso, vista aberta e atmosfera de litoral. O projeto traz 3 quartos, varanda ampla, integracao entre sala e area externa e aproximadamente 110 metros quadrados, com foco em ventilacao, iluminacao natural e experiencia de uso nos fins de semana ou temporadas longas. O perfil combina bem com clientes que perguntam sobre proximidade da orla, lazer, praticidade de manutencao e uso para familia ou temporadas. A imagem de jardim reforca o clima do imovel e o documento em PDF concentra as especificacoes principais para consulta mais detalhada.\", \"source_url\": \"https://example.com/brisa-do-mar-residence\", \"extraction_version\": \"seed-v2\"}, \"building_photos_total\": 1, \"building_videos_total\": 0, \"building_documents_total\": 1, \"media_inventory\": {\"photos\": [\"imagem_jardim.jpg\"], \"videos\": [], \"documents\": [\"EspecificacoesImovel.pdf\"]}}, \"summary\": \"Informacoes do empreendimento carregadas.\"}",
+      "created_at": "2026-07-01T19:42:02.995238+00:00",
+      "sent_at": "2026-07-01T19:42:02.995131+00:00"
+    },
+    {
+      "message_id": "fa6f9385-2be5-4b8a-a30e-aa87600ee605",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "tool_call",
+      "content": "{\"name\": \"send_building_document\", \"arguments\": {\"building_id\": \"63687211-4308-461f-8a46-5ac69612b9d2\", \"document_file_name\": \"EspecificacoesImovel.pdf\"}}",
+      "created_at": "2026-07-01T19:42:04.411583+00:00",
+      "sent_at": "2026-07-01T19:42:04.411338+00:00"
+    },
+    {
+      "message_id": "2a518869-372d-4ee6-851f-35f6aabb4586",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "tool_response",
+      "content": "{\"success\": true, \"tool_output\": {\"type\": \"send_building_document\", \"building_id\": \"63687211-4308-461f-8a46-5ac69612b9d2\", \"resolved_from\": \"uuid\", \"document_file_name\": \"EspecificacoesImovel.pdf\", \"document_url\": \"https://pub-78d5c1f023a34caab9a8c5564c4931e8.r2.dev/EspecificacoesImovel.pdf\"}, \"summary\": \"Documento selecionado para o empreendimento.\", \"media_events\": [{\"event\": \"media_sent\", \"url\": \"https://pub-78d5c1f023a34caab9a8c5564c4931e8.r2.dev/EspecificacoesImovel.pdf\", \"success\": true}]}",
+      "created_at": "2026-07-01T19:42:05.342580+00:00",
+      "sent_at": "2026-07-01T19:42:05.342523+00:00"
+    },
+    {
+      "message_id": "34680789-55d6-43da-9262-d09ce5b39fbd",
+      "external_message_id": null,
+      "sender_type": "assistant",
+      "interaction_type": "chat",
+      "content": "Aqui está o documento com as especificações do Brisa do Mar Residence: [Especificações do Imóvel](https://pub-78d5c1f023a34caab9a8c5564c4931e8.r2.dev/EspecificacoesImovel.pdf). Se precisar de mais informações, estou por aqui!",
+      "created_at": "2026-07-01T19:42:07.803127+00:00",
+      "sent_at": "2026-07-01T19:42:07.802873+00:00"
+    },
+    {
+      "message_id": "2a91d789-569a-446b-94f1-24d6a4e495d7",
+      "external_message_id": 1073204,
+      "sender_type": "user",
+      "interaction_type": "chat",
+      "content": "Tambem queria saber se conseguem agendar uma visita ou me passar com um corretor para eu entender proposta e negociacao.",
+      "created_at": "2026-07-01T19:42:13.241162+00:00",
+      "sent_at": "2026-07-01T19:42:13.241087+00:00"
+    },
+    {
+      "message_id": "8fd198a6-2ede-453d-badc-33d54b1cb50c",
+      "external_message_id": null,
+      "sender_type": "assistant",
+      "interaction_type": "chat",
+      "content": "Claro, posso te ajudar com isso! Para agendar uma visita ou passar o seu contato para um corretor, por favor, me forneça seu e-mail. Isso ajudará no agendamento da visita ou na comunicação com um corretor.",
+      "created_at": "2026-07-01T19:42:15.407872+00:00",
+      "sent_at": "2026-07-01T19:42:15.407584+00:00"
+    },
+    {
+      "message_id": "37f829ea-0e5c-455b-90bc-a72d8b70fa4a",
+      "external_message_id": 1073205,
+      "sender_type": "user",
+      "interaction_type": "chat",
+      "content": "Meu email e leadinusitado32@example.com",
+      "created_at": "2026-07-01T19:42:31.251163+00:00",
+      "sent_at": "2026-07-01T19:42:31.250825+00:00"
+    },
+    {
+      "message_id": "67536f36-2084-4c3a-a250-61aabbbe27e9",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "tool_call",
+      "content": "{\"name\": \"transfer_human\", \"arguments\": {\"summary\": \"Usuario deseja agendar visita ou falar com um corretor sobre proposta e negociação.\", \"email\": \"leadinusitado32@example.com\", \"lead_quality\": \"high\", \"qualification_reason\": \"Solicitou agendamento de visita e negociação com corretor.\"}}",
+      "created_at": "2026-07-01T19:42:35.046590+00:00",
+      "sent_at": "2026-07-01T19:42:35.046528+00:00"
+    },
+    {
+      "message_id": "f74afd21-ce65-42eb-aa7b-053e0f5ef8d3",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "tool_response",
+      "content": "{\"success\": true, \"tool_output\": {\"type\": \"transfer_human\", \"message\": \"Transferindo para atendente humano...\", \"summary\": \"Usuario deseja agendar visita ou falar com um corretor sobre proposta e negociação.\", \"email\": \"leadinusitado32@example.com\", \"lead_quality\": \"high\", \"qualification_reason\": \"Solicitou agendamento de visita e negociação com corretor.\"}, \"summary\": \"\"}",
+      "created_at": "2026-07-01T19:42:35.592056+00:00",
+      "sent_at": "2026-07-01T19:42:35.591891+00:00"
+    },
+    {
+      "message_id": "7bc1b8c2-91a6-47f5-a7fb-95bb1ee80d22",
+      "external_message_id": null,
+      "sender_type": "assistant",
+      "interaction_type": "chat",
+      "content": "Estou transferindo você para um atendente humano que poderá ajudar com o agendamento da visita e negociação. Obrigado pelo seu interesse!",
+      "created_at": "2026-07-01T19:42:37.477862+00:00",
+      "sent_at": "2026-07-01T19:42:37.477628+00:00"
+    },
+    {
+      "message_id": "26cfc85b-6a45-42f2-bc24-c8a6b18eab02",
+      "external_message_id": 1073206,
+      "sender_type": "user",
+      "interaction_type": "chat",
+      "content": "Se der, ja deixa um resumo do que eu pedi para o corretor continuar dali.",
+      "created_at": "2026-07-01T19:42:49.259193+00:00",
+      "sent_at": "2026-07-01T19:42:49.258923+00:00"
+    },
+    {
+      "message_id": "ec6adf25-6f52-449f-8505-4e7338a226fc",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "tool_call",
+      "content": "{\"name\": \"transfer_human\", \"arguments\": {\"summary\": \"O cliente demonstrou interesse no Brisa do Mar Residence e solicitou detalhes sobre propostas e negociação, além de querer agendar uma visita.\", \"email\": \"leadinusitado32@example.com\", \"lead_quality\": \"high\", \"qualification_reason\": \"Interesse em visita e negociação para um empreendimento específico.\"}}",
+      "created_at": "2026-07-01T19:42:51.629370+00:00",
+      "sent_at": "2026-07-01T19:42:51.629126+00:00"
+    },
+    {
+      "message_id": "3bc0c831-0f7b-473a-a738-f23c2302c046",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "tool_response",
+      "content": "{\"success\": true, \"tool_output\": {\"type\": \"transfer_human\", \"message\": \"Transferindo para atendente humano...\", \"summary\": \"O cliente demonstrou interesse no Brisa do Mar Residence e solicitou detalhes sobre propostas e negociação, além de querer agendar uma visita.\", \"email\": \"leadinusitado32@example.com\", \"lead_quality\": \"high\", \"qualification_reason\": \"Interesse em visita e negociação para um empreendimento específico.\"}, \"summary\": \"\"}",
+      "created_at": "2026-07-01T19:42:52.116080+00:00",
+      "sent_at": "2026-07-01T19:42:52.115820+00:00"
+    },
+    {
+      "message_id": "3a256ac1-060a-432d-a092-8fe69aefa21c",
+      "external_message_id": null,
+      "sender_type": "assistant",
+      "interaction_type": "chat",
+      "content": "Eu já transferi suas informações para um atendente humano. Eles vão continuar com você para agendar a visita e discutir propostas. Obrigado pelo seu interesse!",
+      "created_at": "2026-07-01T19:42:53.777479+00:00",
+      "sent_at": "2026-07-01T19:42:53.777240+00:00"
+    }
+  ]
+}

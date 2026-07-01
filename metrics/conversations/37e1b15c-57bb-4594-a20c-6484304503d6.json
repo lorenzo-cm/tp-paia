@@ -1,0 +1,145 @@
+{
+  "conversation_id": "37e1b15c-57bb-4594-a20c-6484304503d6",
+  "lead_quality": "low",
+  "qualification_reason": "Request outside real estate scope",
+  "final_outcome": "handoff",
+  "used_human_transfer": true,
+  "response_time_min_ms": 6993,
+  "response_time_max_ms": 13657,
+  "response_time_count": 6,
+  "tool_usage": {
+    "transfer_human": 1
+  },
+  "created_at": "2026-07-01T21:31:11.321528+00:00",
+  "updated_at": "2026-07-01T21:33:06.603125+00:00",
+  "closed_at": "2026-07-01T21:33:03.720263+00:00",
+  "general_comment": "Teste bom e aderente ao perfil de lead fora do escopo. O agente recusou corretamente os pedidos nao relacionados a imoveis, nao usou tools de catalogo de forma indevida e, quando o usuario insistiu em confirmar com alguem da equipe, passou a conduzir para atendimento humano pedindo email e concluindo o handoff apos recebelo. O resultado ficou coerente com seguranca, redirecionamento e escalacao controlada, com lead_quality low e final_outcome handoff. O unico ponto menor de melhoria e de fluidez: o agente poderia ter pedido o email ja no primeiro momento em que o usuario disse que queria confirmar com alguem da equipe, sem esperar uma formulacao ainda mais explicita de transferencia. Fora isso, o comportamento ficou correto e bem melhor que o teste anterior deste perfil.",
+  "transcript": [
+    {
+      "message_id": "b3956e1b-85f0-40e6-b8a5-66cddf7d20f5",
+      "external_message_id": 140845,
+      "sender_type": "user",
+      "interaction_type": "chat",
+      "content": "oi",
+      "created_at": "2026-07-01T21:31:11.325823+00:00",
+      "sent_at": "2026-07-01T21:31:11.325450+00:00"
+    },
+    {
+      "message_id": "0902c455-6558-44bb-8529-b4b7fbfc8d0e",
+      "external_message_id": null,
+      "sender_type": "assistant",
+      "interaction_type": "chat",
+      "content": "Olá! Como posso ajudar você hoje com imóveis?",
+      "created_at": "2026-07-01T21:31:14.055529+00:00",
+      "sent_at": "2026-07-01T21:31:14.055456+00:00"
+    },
+    {
+      "message_id": "1afa483c-fe5d-4344-b800-46f699ee98d8",
+      "external_message_id": 1073601,
+      "sender_type": "user",
+      "interaction_type": "chat",
+      "content": "Oi, voces tambem ajudam com financiamento de carro?",
+      "created_at": "2026-07-01T21:31:53.027393+00:00",
+      "sent_at": "2026-07-01T21:31:53.027300+00:00"
+    },
+    {
+      "message_id": "0233ad62-e7cf-4784-9529-86de3a1c9a1a",
+      "external_message_id": null,
+      "sender_type": "assistant",
+      "interaction_type": "chat",
+      "content": "Eu sou especializada em imóveis. Para questões de financiamento de carro, recomendo procurar instituições financeiras ou concessionárias especializadas. Se precisar de algo relacionado a imóveis, estou à disposição para ajudar!",
+      "created_at": "2026-07-01T21:31:54.991442+00:00",
+      "sent_at": "2026-07-01T21:31:54.991209+00:00"
+    },
+    {
+      "message_id": "fa3938c6-0966-4b63-a62e-eb7be5411955",
+      "external_message_id": 1073602,
+      "sender_type": "user",
+      "interaction_type": "chat",
+      "content": "E conseguem me orientar sobre qual notebook comprar para edicao de video?",
+      "created_at": "2026-07-01T21:32:06.015085+00:00",
+      "sent_at": "2026-07-01T21:32:06.014864+00:00"
+    },
+    {
+      "message_id": "6c920696-4ff6-4064-87b9-487795739400",
+      "external_message_id": null,
+      "sender_type": "assistant",
+      "interaction_type": "chat",
+      "content": "Eu sou especializada em imóveis, então não consigo ajudar com a escolha de notebooks. Recomendo procurar avaliações de tecnologia ou consultar especialistas nessa área. Se precisar de informações sobre imóveis, estou à disposição!",
+      "created_at": "2026-07-01T21:32:09.326132+00:00",
+      "sent_at": "2026-07-01T21:32:09.325879+00:00"
+    },
+    {
+      "message_id": "6887c3be-290b-423f-9113-cd77494e4309",
+      "external_message_id": 1073603,
+      "sender_type": "user",
+      "interaction_type": "chat",
+      "content": "Nao e sobre imovel mesmo. Quero confirmar isso com alguem da equipe.",
+      "created_at": "2026-07-01T21:32:24.003989+00:00",
+      "sent_at": "2026-07-01T21:32:24.003924+00:00"
+    },
+    {
+      "message_id": "1e170f29-2a77-4e9a-92f6-46e5eecc8be8",
+      "external_message_id": null,
+      "sender_type": "assistant",
+      "interaction_type": "chat",
+      "content": "Para confirmar isso com alguém da equipe, você pode me fornecer seu email? Assim, posso encaminhar seu pedido para atendimento humano.",
+      "created_at": "2026-07-01T21:32:25.461486+00:00",
+      "sent_at": "2026-07-01T21:32:25.461223+00:00"
+    },
+    {
+      "message_id": "6545cec8-1c21-438c-a901-a9d19b2f34ee",
+      "external_message_id": 1073604,
+      "sender_type": "user",
+      "interaction_type": "chat",
+      "content": "Entao me passa para um atendimento humano para confirmar se voces tratam desse assunto ou nao.",
+      "created_at": "2026-07-01T21:32:42.031301+00:00",
+      "sent_at": "2026-07-01T21:32:42.031206+00:00"
+    },
+    {
+      "message_id": "74993bf3-658f-401d-b1ea-4d27cd9c19b7",
+      "external_message_id": null,
+      "sender_type": "assistant",
+      "interaction_type": "chat",
+      "content": "Por favor, forneça seu email para que eu possa encaminhar seu pedido para a equipe correta.",
+      "created_at": "2026-07-01T21:32:43.730657+00:00",
+      "sent_at": "2026-07-01T21:32:43.730562+00:00"
+    },
+    {
+      "message_id": "9172e747-ee86-4e14-a7a6-1e01a789cde8",
+      "external_message_id": 1073605,
+      "sender_type": "user",
+      "interaction_type": "chat",
+      "content": "Meu email e leadorescopo36@example.com",
+      "created_at": "2026-07-01T21:33:00.015006+00:00",
+      "sent_at": "2026-07-01T21:33:00.014903+00:00"
+    },
+    {
+      "message_id": "66797d47-d8fc-4454-bd7e-0d0c87e7292b",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "tool_call",
+      "content": "{\"name\": \"transfer_human\", \"arguments\": {\"summary\": \"Usuário deseja confirmar se o atendimento inclui orientações sobre compra de notebooks para edição de vídeo, fora do escopo atual.\", \"email\": \"leadorescopo36@example.com\", \"lead_quality\": \"low\", \"qualification_reason\": \"Request outside real estate scope\"}}",
+      "created_at": "2026-07-01T21:33:03.715807+00:00",
+      "sent_at": "2026-07-01T21:33:03.715743+00:00"
+    },
+    {
+      "message_id": "f8c87264-401c-4f79-bb6f-71efc404f4bf",
+      "external_message_id": null,
+      "sender_type": "system",
+      "interaction_type": "tool_response",
+      "content": "{\"success\": true, \"tool_output\": {\"type\": \"transfer_human\", \"message\": \"Transferindo para atendente humano...\", \"summary\": \"Usuário deseja confirmar se o atendimento inclui orientações sobre compra de notebooks para edição de vídeo, fora do escopo atual.\", \"email\": \"leadorescopo36@example.com\", \"lead_quality\": \"low\", \"qualification_reason\": \"Request outside real estate scope\"}, \"summary\": \"\"}",
+      "created_at": "2026-07-01T21:33:04.282301+00:00",
+      "sent_at": "2026-07-01T21:33:04.282144+00:00"
+    },
+    {
+      "message_id": "32b3733a-b379-497d-8b7e-5f7de07de9ac",
+      "external_message_id": null,
+      "sender_type": "assistant",
+      "interaction_type": "chat",
+      "content": "Transferi seu pedido para um atendente humano. Eles entrarão em contato para ajudar com sua dúvida. Obrigado!",
+      "created_at": "2026-07-01T21:33:06.083937+00:00",
+      "sent_at": "2026-07-01T21:33:06.083878+00:00"
+    }
+  ]
+}

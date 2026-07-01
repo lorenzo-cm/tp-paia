@@ -4,6 +4,7 @@ import time
 from sqlalchemy.engine import Engine
 from sqlmodel import Session
 
+from app.core.logger import log_context
 from app.db.config import engine as default_engine
 from app.services.agent.base import BaseAgent
 from app.services.message_debouncer.service import MessageDebouncer
@@ -62,40 +63,46 @@ class MessagePipeline:
         sender: OutboundSender,
         media_fetcher: MediaFetcher,
     ) -> None:
-        response_started = time.monotonic()
-        batch = await steps.debounce(self._debouncer, msg)
-        if batch is None:
-            return
-        with Session(self._engine) as db:
-            repos = Repos(db)
-
-            context = steps.save_user_messages(batch, repos)
-
-            enriched = await steps.enrich_attachments(
-                context, repos, media_fetcher, self._attachments, self._r2
-            )
-
-            steps.rag_index(enriched, repos)
-
-            if await steps.moderate(
-                enriched,
-                context,
-                repos,
-                db,
-                sender,
-                self._nsfw,
-                self._agent,
-                response_started=response_started,
-            ):
+        with log_context(
+            external_conversation_id=msg.external_conversation_id,
+            contact_external_id=msg.contact_external_id,
+            inbox_id=msg.inbox_ref,
+        ):
+            response_started = time.monotonic()
+            batch = await steps.debounce(self._debouncer, msg)
+            if batch is None:
                 return
+            with Session(self._engine) as db:
+                repos = Repos(db)
 
-            await steps.invoke_agent(
-                enriched,
-                context,
-                repos,
-                db,
-                sender,
-                self._agent,
-                agent_history_limit=self._agent_history_limit,
-                response_started=response_started,
-            )
+                context = steps.save_user_messages(batch, repos)
+
+                with log_context(conversation_id=context.conversation_id):
+                    enriched = await steps.enrich_attachments(
+                        context, repos, media_fetcher, self._attachments, self._r2
+                    )
+
+                    steps.rag_index(enriched, repos)
+
+                    if await steps.moderate(
+                        enriched,
+                        context,
+                        repos,
+                        db,
+                        sender,
+                        self._nsfw,
+                        self._agent,
+                        response_started=response_started,
+                    ):
+                        return
+
+                    await steps.invoke_agent(
+                        enriched,
+                        context,
+                        repos,
+                        db,
+                        sender,
+                        self._agent,
+                        agent_history_limit=self._agent_history_limit,
+                        response_started=response_started,
+                    )

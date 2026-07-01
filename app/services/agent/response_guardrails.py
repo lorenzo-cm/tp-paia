@@ -22,11 +22,24 @@ OFF_TOPIC_FALLBACK = (
 )
 MAX_RESPONSE_LENGTH = 600
 MARKDOWN_ASTERISK_RE = re.compile(r"(?<!\*)\*{1,2}([^*\n][^*\n]*?)\*{1,2}(?!\*)")
+EMOJI_RE = re.compile(
+    "["
+    "\U0001F300-\U0001FAFF"
+    "\U00002700-\U000027BF"
+    "\U00002600-\U000026FF"
+    "]+"
+)
 
 
 def _strip_markdown_artifacts(text: str) -> str:
     cleaned = MARKDOWN_ASTERISK_RE.sub(lambda match: match.group(1).strip(), text)
     cleaned = cleaned.replace("```", " ")
+    cleaned = re.sub(r"\s+", " ", cleaned)
+    return cleaned.strip()
+
+
+def _strip_emoji(text: str) -> str:
+    cleaned = EMOJI_RE.sub("", text)
     cleaned = re.sub(r"\s+", " ", cleaned)
     return cleaned.strip()
 
@@ -52,6 +65,11 @@ def sanitize_customer_text(text: str) -> tuple[str, bool]:
                 break
 
     cleaned = _strip_markdown_artifacts(sanitized)
+    if cleaned != sanitized:
+        sanitized = cleaned
+        replaced = True
+
+    cleaned = _strip_emoji(sanitized)
     if cleaned != sanitized:
         sanitized = cleaned
         replaced = True

@@ -8,6 +8,7 @@ from sqlmodel import Session
 
 from app.db.models.conversations import (
     ConversationUpdate,
+    FinalOutcome,
     InteractionType,
     LeadQuality,
     MessageCreate,
@@ -132,6 +133,7 @@ async def invoke_agent(
     await asyncio.to_thread(sender.send_message, context.conv_ext_id, customer_text)
     response_time_ms = int((time.monotonic() - response_started) * 1000)
     repos.metric.record_response_time(context.conversation_id, response_time_ms)
+    _mark_retained_on_clean_close(enriched.combined_text, context, repos)
     db.commit()
 
 
@@ -233,26 +235,45 @@ async def _execute_tool(
     if media_events:
         result = {**result, "media_events": media_events}
 
-    repos.metric.increment_tool_usage(context.conversation_id, tool_name)
     if tool_name == "set_lead_quality" and result.get("success"):
         lead_quality = _parse_lead_quality(arguments.get("lead_quality"))
         qualification_reason = str(arguments.get("qualification_reason") or "").strip()
         if lead_quality is not None and qualification_reason:
-            repos.metric.update_lead_quality(
-                context.conversation_id,
-                lead_quality,
-                qualification_reason,
-            )
-    if tool_name == "transfer_human" and result.get("success"):
+            metric = repos.metric.get_or_create_by_conversation_id(context.conversation_id)
+            if metric.lead_quality != lead_quality:
+                repos.metric.increment_tool_usage(context.conversation_id, tool_name)
+                repos.metric.update_lead_quality(
+                    context.conversation_id,
+                    lead_quality,
+                    qualification_reason,
+                )
+            else:
+                _record_guardrail_event(
+                    context=context,
+                    repos=repos,
+                    event="duplicate_lead_quality_ignored",
+                    payload={"lead_quality": lead_quality.value},
+                )
+    elif tool_name == "transfer_human" and result.get("success"):
         lead_quality = _parse_lead_quality(arguments.get("lead_quality"))
         qualification_reason = str(arguments.get("qualification_reason") or "").strip()
-        if lead_quality is not None and qualification_reason:
+        metric = repos.metric.get_or_create_by_conversation_id(context.conversation_id)
+        was_already_handoff = metric.final_outcome == FinalOutcome.HANDOFF
+        if was_already_handoff:
+            _record_guardrail_event(
+                context=context,
+                repos=repos,
+                event="duplicate_handoff_ignored",
+                payload={"tool_name": tool_name},
+            )
+        elif lead_quality is not None and qualification_reason:
+            repos.metric.increment_tool_usage(context.conversation_id, tool_name)
             repos.metric.mark_handoff(
                 context.conversation_id,
                 lead_quality=lead_quality,
                 qualification_reason=qualification_reason,
             )
-        if _supports_open_conversation(sender):
+        if not was_already_handoff and _supports_open_conversation(sender):
             try:
                 await asyncio.to_thread(sender.open_conversation, context.conv_ext_id)
             except Exception:
@@ -261,6 +282,8 @@ async def _execute_tool(
                     extra={"conversation_id": context.conv_ext_id, "tool_name": tool_name},
                     exc_info=True,
                 )
+    else:
+        repos.metric.increment_tool_usage(context.conversation_id, tool_name)
 
     _update_conversation_meta(tool_name, arguments, result, context, repos)
     duration_ms = int((time.monotonic() - started) * 1000)
@@ -371,6 +394,50 @@ def _format_rag_context(rag_context: list[object]) -> str:
         )
         lines.append(f"   Trecho: {text}")
     return "\n".join(lines)
+
+
+def _mark_retained_on_clean_close(
+    user_text: str,
+    context: ConversationContext,
+    repos: Repos,
+) -> None:
+    normalized = _normalize_text(user_text)
+    closing_signals = (
+        "era isso",
+        "por enquanto era isso",
+        "nao quero seguir",
+        "nao quero atendimento",
+        "nao quero seguir com atendimento",
+        "sem atendimento",
+        "obrigado era so",
+        "obrigada era so",
+    )
+    if not any(signal in normalized for signal in closing_signals):
+        return
+    metric = repos.metric.get_or_create_by_conversation_id(context.conversation_id)
+    if metric.final_outcome is not None:
+        return
+    if metric.lead_quality == LeadQuality.LOW or "nao quero" in normalized:
+        repos.metric.mark_retained(context.conversation_id)
+
+
+def _normalize_text(value: str) -> str:
+    return (
+        (value or "")
+        .lower()
+        .replace("ã", "a")
+        .replace("á", "a")
+        .replace("à", "a")
+        .replace("â", "a")
+        .replace("é", "e")
+        .replace("ê", "e")
+        .replace("í", "i")
+        .replace("ó", "o")
+        .replace("ô", "o")
+        .replace("õ", "o")
+        .replace("ú", "u")
+        .replace("ç", "c")
+    )
 
 
 def _record_guardrail_event(

@@ -1,16 +1,19 @@
 {
-  "total_conversations": 5,
-  "retained_count": 0,
-  "handoff_count": 0,
+  "total_conversations": 19,
+  "retained_count": 1,
+  "handoff_count": 5,
   "dropped_count": 0,
-  "scheduled_count": 0,
+  "scheduled_count": 4,
   "tool_usage": {
-    "get_all_building": 9,
-    "get_building_info": 10,
-    "search_building_information": 11,
-    "send_building_document": 1,
-    "send_photo_file": 1,
-    "send_video_file": 1
+    "get_all_building": 23,
+    "get_building_info": 29,
+    "search_building_information": 20,
+    "send_building_document": 2,
+    "send_photo_file": 2,
+    "send_video_file": 5,
+    "set_lead_quality": 8,
+    "store_lead_house": 2,
+    "transfer_human": 8
   },
-  "avg_response_count_per_conversation": 7.4
+  "avg_response_count_per_conversation": 6.684210526315789
 }
