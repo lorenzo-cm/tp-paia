@@ -18,6 +18,7 @@
   "created_at": "2026-07-01T22:08:07.751986+00:00",
   "updated_at": "2026-07-01T22:10:14.263750+00:00",
   "closed_at": "2026-07-01T22:09:56.375767+00:00",
+  "general_comment": "Teste aderente ao perfil de lead quente no resultado principal: o agente qualificou como high, enviou o video corretamente, registrou interesse no imovel e concluiu handoff com used_human_transfer=true. A correcao de metrica funcionou, porque transfer_human contou apenas uma vez. O problema residual esta no comportamento conversacional: depois do handoff ja registrado, o agente chamou transfer_human novamente ao receber um pedido de resumo e respondeu ao cliente com uma segunda mensagem de encaminhamento. Tambem houve um get_all_building desnecessario no primeiro turno, ja que o usuario nomeou diretamente a Casa Mirante das Palmeiras e o fluxo ideal seria ir direto para get_building_info.",
   "transcript": [
     {
       "message_id": "14e267ec-3532-4b98-b9a3-dd0f55a617a7",
