@@ -9,7 +9,12 @@ from uuid import UUID
 from sqlmodel import Session, select
 
 from app.db.config import engine
-from app.db.models.conversations import ConversationMetric, FinalOutcome, LeadQuality
+from app.db.models.conversations import (
+    ConversationMetric,
+    FinalOutcome,
+    LeadQuality,
+    Message,
+)
 
 METRICS_DIR = Path(__file__).resolve().parents[1] / "metrics"
 CONVERSATIONS_DIR = METRICS_DIR / "conversations"
@@ -36,6 +41,21 @@ def _serialize_metric(metric: ConversationMetric) -> dict[str, object]:
     }
 
 
+def _serialize_transcript(messages: list[Message]) -> list[dict[str, object]]:
+    return [
+        {
+            "message_id": str(message.id),
+            "external_message_id": message.external_message_id,
+            "sender_type": message.sender_type.value,
+            "interaction_type": message.interaction_type.value,
+            "content": message.content,
+            "created_at": message.created_at.isoformat(),
+            "sent_at": message.sent_at.isoformat(),
+        }
+        for message in messages
+    ]
+
+
 def export_conversation(conversation_id: UUID) -> Path:
     with Session(engine) as db:
         metric = db.exec(
@@ -45,10 +65,19 @@ def export_conversation(conversation_id: UUID) -> Path:
         ).first()
         if metric is None:
             raise SystemExit(f"conversation_metrics not found for {conversation_id}")
+        messages = list(
+            db.exec(
+                select(Message)
+                .where(Message.conversation_id == conversation_id)
+                .order_by(Message.created_at.asc(), Message.id.asc())
+            ).all()
+        )
     CONVERSATIONS_DIR.mkdir(parents=True, exist_ok=True)
     output_path = CONVERSATIONS_DIR / f"{conversation_id}.json"
+    payload = _serialize_metric(metric)
+    payload["transcript"] = _serialize_transcript(messages)
     output_path.write_text(
-        json.dumps(_serialize_metric(metric), ensure_ascii=False, indent=2) + "\n",
+        json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
     )
     return output_path

@@ -1,9 +1,16 @@
 {
-  "total_conversations": 0,
+  "total_conversations": 5,
   "retained_count": 0,
   "handoff_count": 0,
   "dropped_count": 0,
   "scheduled_count": 0,
-  "tool_usage": {},
-  "avg_response_count_per_conversation": 0
+  "tool_usage": {
+    "get_all_building": 9,
+    "get_building_info": 10,
+    "search_building_information": 11,
+    "send_building_document": 1,
+    "send_photo_file": 1,
+    "send_video_file": 1
+  },
+  "avg_response_count_per_conversation": 7.4
 }

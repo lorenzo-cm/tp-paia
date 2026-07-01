@@ -3,16 +3,43 @@ from uuid import uuid4
 
 from sqlmodel import Session
 
-from app.db.models.conversations import LeadQuality
+from app.db.models.conversations import LeadQuality, ParticipantType, SenderType
 from app.db.repositories.conversations import ConversationMetricRepository
 from scripts import export_conversation_metrics as export_module
-from tests.db.repositories.conversations.factories import make_conversation
+from tests.db.repositories.conversations.factories import (
+    make_contact,
+    make_conversation,
+    make_message,
+    make_participant,
+)
 
 
 def test_export_conversation_and_summary(db_session: Session, tmp_path: Path) -> None:
     conversation_a = make_conversation(db_session, external_id=2001)
     conversation_b = make_conversation(db_session, external_id=2002)
     conversation_c = make_conversation(db_session, external_id=2003)
+    contact = make_contact(db_session, external_id=3001)
+    contact_participant = make_participant(
+        db_session, conversation_a.id, contact_id=contact.id
+    )
+    bot_participant = make_participant(
+        db_session, conversation_a.id, participant_type=ParticipantType.BOT
+    )
+    make_message(
+        db_session,
+        conversation_a.id,
+        contact_participant.id,
+        external_id=4001,
+        content="Quero saber mais sobre esse imovel.",
+        sender_type=SenderType.USER,
+    )
+    make_message(
+        db_session,
+        conversation_a.id,
+        bot_participant.id,
+        content="Posso te mostrar fotos, video ou documento.",
+        sender_type=SenderType.ASSISTANT,
+    )
     repo = ConversationMetricRepository(db_session)
 
     repo.mark_handoff(
@@ -51,6 +78,10 @@ def test_export_conversation_and_summary(db_session: Session, tmp_path: Path) ->
     assert str(conversation_a.id) in conversation_payload
     assert '"lead_quality": "high"' in conversation_payload
     assert '"final_outcome": "handoff"' in conversation_payload
+    assert '"transcript": [' in conversation_payload
+    assert '"sender_type": "user"' in conversation_payload
+    assert '"sender_type": "assistant"' in conversation_payload
+    assert "Quero saber mais sobre esse imovel." in conversation_payload
     assert '"scheduled_count": 1' in summary_payload
     assert "Agendamentos proxy via transferencia humana" in (
         export_module.SCHEDULED_COUNT_DESCRIPTION

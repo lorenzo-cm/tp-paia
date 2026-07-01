@@ -47,27 +47,28 @@ def _seed_building(db_engine, **overrides):
     )
     with Session(db_engine) as db:
         repo = BuildingRepository(db)
+        data = {
+            "name": "Residencial Aurora",
+            "information": "Empreendimento de alto padrão com lazer completo.",
+            "photos_url": [
+                "https://cdn.example.com/aurora/fachada-01.jpg",
+                "https://cdn.example.com/aurora/fachada-02.jpg",
+                "https://cdn.example.com/aurora/piscina.jpg",
+            ],
+            "videos_url": [
+                "https://cdn.example.com/aurora/tour.mp4",
+                "https://cdn.example.com/aurora/apresentacao.mp4",
+            ],
+            "documents_url": [
+                "https://cdn.example.com/aurora/memorial.pdf",
+                "https://cdn.example.com/aurora/brochure.pdf",
+            ],
+            "source_url": source_url,
+            "extraction_version": "v1",
+            **overrides,
+        }
         building = repo.create(
-            BuildingCreate(
-                name="Residencial Aurora",
-                information="Empreendimento de alto padrão com lazer completo.",
-                photos_url=[
-                    "https://cdn.example.com/aurora/fachada-01.jpg",
-                    "https://cdn.example.com/aurora/fachada-02.jpg",
-                    "https://cdn.example.com/aurora/piscina.jpg",
-                ],
-                videos_url=[
-                    "https://cdn.example.com/aurora/tour.mp4",
-                    "https://cdn.example.com/aurora/apresentacao.mp4",
-                ],
-                documents_url=[
-                    "https://cdn.example.com/aurora/memorial.pdf",
-                    "https://cdn.example.com/aurora/brochure.pdf",
-                ],
-                source_url=source_url,
-                extraction_version="v1",
-                **overrides,
-            )
+            BuildingCreate(**data)
         )
         db.commit()
         db.refresh(building)
@@ -163,6 +164,23 @@ def test_get_building_info_returns_serialized_payload(db_engine, monkeypatch) ->
     assert result["tool_output"]["building_documents_total"] == 2
 
 
+def test_get_building_info_accepts_building_name_and_slug(
+    db_engine, monkeypatch
+) -> None:
+    building = _seed_building(db_engine, name="Casa Mirante das Palmeiras")
+    monkeypatch.setattr(tools_module, "engine", db_engine)
+
+    by_name = get_building_info(building_id="Casa Mirante das Palmeiras")
+    by_slug = get_building_info(building_id="casa_mirante_das_palmeiras")
+
+    assert by_name["success"] is True
+    assert by_name["tool_output"]["building_id"] == str(building.id)
+    assert by_name["tool_output"]["resolved_from"] == "name"
+    assert by_slug["success"] is True
+    assert by_slug["tool_output"]["building_id"] == str(building.id)
+    assert by_slug["tool_output"]["resolved_from"] in {"name", "slug"}
+
+
 def test_search_building_information_returns_relevant_chunks(
     db_engine, monkeypatch
 ) -> None:
@@ -182,13 +200,20 @@ def test_search_building_information_returns_relevant_chunks(
 def test_get_building_info_returns_not_found_for_unknown_id(
     db_engine, monkeypatch
 ) -> None:
-    _seed_building(db_engine)
+    building = _seed_building(db_engine)
     monkeypatch.setattr(tools_module, "engine", db_engine)
 
     result = get_building_info(building_id=str(uuid4()))
 
     assert result["success"] is False
     assert result["tool_output"]["error_code"] == "building_not_found"
+    assert "Nao invente building_id" in result["tool_output"]["retry_instruction"]
+    assert result["tool_output"]["available_buildings"] == [
+        {
+            "building_id": str(building.id),
+            "building_name": "Residencial Aurora",
+        }
+    ]
 
 
 def test_send_photo_file_selects_up_to_two_matching_urls(db_engine, monkeypatch) -> None:
@@ -203,6 +228,24 @@ def test_send_photo_file_selects_up_to_two_matching_urls(db_engine, monkeypatch)
     assert result["tool_output"]["photos_url"] == [
         "https://cdn.example.com/aurora/fachada-01.jpg",
         "https://cdn.example.com/aurora/fachada-02.jpg",
+    ]
+
+
+def test_send_photo_file_accepts_ordinal_building_reference(
+    db_engine, monkeypatch
+) -> None:
+    _seed_building(db_engine, name="Brisa do Mar Residence")
+    _seed_building(db_engine, name="Casa Mirante das Palmeiras")
+    aurora = _seed_building(db_engine, name="Residencial Aurora")
+    monkeypatch.setattr(tools_module, "engine", db_engine)
+
+    result = send_photo_file(building_id="3", parte_do_imovel="piscina")
+
+    assert result["success"] is True
+    assert result["tool_output"]["building_id"] == str(aurora.id)
+    assert result["tool_output"]["resolved_from"] == "ordinal"
+    assert result["tool_output"]["photos_url"] == [
+        "https://cdn.example.com/aurora/piscina.jpg"
     ]
 
 
@@ -221,6 +264,20 @@ def test_send_video_and_document_return_requested_media(
     assert video["tool_output"]["video_url"] == "https://cdn.example.com/aurora/tour.mp4"
     assert document["success"] is True
     assert document["tool_output"]["document_url"] == "https://cdn.example.com/aurora/memorial.pdf"
+
+
+def test_send_video_accepts_name_building_reference(db_engine, monkeypatch) -> None:
+    building = _seed_building(db_engine, name="Casa Mirante das Palmeiras")
+    monkeypatch.setattr(tools_module, "engine", db_engine)
+
+    video = send_video_file(
+        building_id="Casa Mirante das Palmeiras", video_file_name="tour.mp4"
+    )
+
+    assert video["success"] is True
+    assert video["tool_output"]["building_id"] == str(building.id)
+    assert video["tool_output"]["resolved_from"] == "name"
+    assert video["tool_output"]["video_url"] == "https://cdn.example.com/aurora/tour.mp4"
 
 
 def test_send_video_and_document_match_by_partial_name(
@@ -349,11 +406,21 @@ def test_transfer_human_rejects_invalid_lead_quality() -> None:
     assert result["tool_output"]["error_code"] == "invalid_lead_quality"
 
 
-def test_store_lead_house_rejects_invalid_building_id() -> None:
+def test_store_lead_house_rejects_invalid_building_id(db_engine, monkeypatch) -> None:
+    building = _seed_building(db_engine)
+    monkeypatch.setattr(tools_module, "engine", db_engine)
+
     result = store_lead_house(building_id="abc")
     assert result["success"] is False
     assert result["tool_output"]["error_code"] == "invalid_building_id"
     assert result["tool_output"]["building_id"] == "abc"
+    assert "Nao invente building_id" in result["tool_output"]["retry_instruction"]
+    assert result["tool_output"]["available_buildings"] == [
+        {
+            "building_id": str(building.id),
+            "building_name": "Residencial Aurora",
+        }
+    ]
 
 
 def test_set_lead_quality_returns_valid_structure_when_complete() -> None:
